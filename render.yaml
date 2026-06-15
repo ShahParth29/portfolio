@@ -33,4 +33,12 @@ services:
         sync: false
       - key: EMAIL_TO
         value: shahparth29980@gmail.com
+      - key: STORAGE_BACKEND
+        value: cloudinary
+      - key: CLOUDINARY_CLOUD_NAME
+        value: dm9cp1tov
+      - key: CLOUDINARY_API_KEY
+        value: "956612849847882"
+      - key: CLOUDINARY_API_SECRET
+        value: -kaW6qysPU9kbu2vboIZasyfqxI
 
