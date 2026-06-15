@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parth Edits — Cinematic Video Editor</title>
-    <meta name="description" content="Professional video editing portfolio by Parth. Cinematic films, YouTube reels, wedding videos. Hire a skilled editor for your next project.">
+    <title>Aurevia Films — Cinematic Video Production</title>
+    <meta name="description" content="Professional video editing portfolio by Aurevia Films. Cinematic films, YouTube reels, wedding videos. Hire a skilled editor for your next project.">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -16,8 +16,7 @@
     <nav class="navbar" id="navbar">
         <div class="container">
             <a href="index.html" class="nav-logo">
-                <span class="nav-logo-icon">P</span>
-                PARTH <span class="logo-accent setting-site_name">EDITS</span>
+                <img src="img/logo.png" alt="Aurevia Films" class="nav-logo-img">
             </a>
             <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
                 <span></span><span></span><span></span>
@@ -128,8 +127,7 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <a href="index.html" class="nav-logo">
-                        <span class="nav-logo-icon">P</span>
-                        PARTH <span class="logo-accent setting-site_name">EDITS</span>
+                        <img src="img/logo.png" alt="Aurevia Films" class="nav-logo-img">
                     </a>
                     <p class="setting-about_text">Professional video editor specializing in cinematic films, reels, and wedding videos. Turning your raw footage into visual stories.</p>
                     <div class="footer-social">
@@ -158,7 +156,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; 2026 <span class="setting-site_name">Parth Edits</span>. All rights reserved.
+                &copy; 2026 <span class="setting-site_name">Aurevia Films</span>. All rights reserved.
             </div>
         </div>
     </footer>
@@ -248,9 +246,10 @@
                 }
                 grid.innerHTML = videos
                     .map((v) => {
-                        const thumb = v.thumbnail_url || (v.youtube_url ? getYouTubeThumbnail(v.youtube_url) : "") || "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800";
+                        const thumb = resolveUploadUrl(v.thumbnail_url) || (v.youtube_url ? getYouTubeThumbnail(v.youtube_url) : "") || "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800";
+                        const videoFile = resolveUploadUrl(v.video_file_url || '');
                         return `
-                        <div class="video-card glass-card fade-in" onclick="openLightbox('${v.youtube_url || ''}', '${v.video_file_url || ''}')">
+                        <div class="video-card glass-card fade-in" onclick="openLightbox('${v.youtube_url || ''}', '${videoFile}')">
                             <div class="video-card-thumb">
                                 <img src="${thumb}" alt="${v.title}" loading="lazy">
                                 <div class="video-card-play"></div>
@@ -286,8 +285,8 @@
                     // Sort by id descending to get the absolute latest uploaded video
                     videos.sort((a, b) => b.id - a.id);
                     showreelUrl = videos[0].youtube_url || "";
-                    showreelFileUrl = videos[0].video_file_url || "";
-                    const thumb = videos[0].thumbnail_url || (videos[0].youtube_url ? getYouTubeThumbnail(videos[0].youtube_url) : "");
+                    showreelFileUrl = resolveUploadUrl(videos[0].video_file_url || "");
+                    const thumb = resolveUploadUrl(videos[0].thumbnail_url) || (videos[0].youtube_url ? getYouTubeThumbnail(videos[0].youtube_url) : "");
                     if (thumb) {
                         const showreelCard = document.getElementById("home-showreel-card");
                         if (showreelCard) {

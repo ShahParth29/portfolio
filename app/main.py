@@ -14,8 +14,8 @@ settings_cfg = get_settings()
 
 # ── App ────────────────────────────────────────────────────────────────────────
 app = FastAPI(
-    title="Parth Edits — Portfolio API",
-    description="Backend API for Parth's video editing portfolio",
+    title="Aurevia Films — Portfolio API",
+    description="Backend API for Aurevia Films video production portfolio",
     version="1.0.0",
     docs_url=None,
     redoc_url=None,
@@ -53,7 +53,7 @@ app.include_router(settings.router)
 
 @app.get("/api/health")
 def health_check():
-    return {"status": "ok", "service": "Parth Edits API"}
+    return {"status": "ok", "service": "Aurevia Films API"}
 
 
 # ── Seed Data ──────────────────────────────────────────────────────────────────
@@ -64,7 +64,7 @@ def seed_data():
         # Seed Settings if empty
         if db.query(SiteSettings).count() == 0:
             default_settings = {
-                "site_name": "Parth Edits",
+                "site_name": "Aurevia Films",
                 "tagline": "I turn moments into memories",
                 "email": "parth@example.com",
                 "phone": "+91 98765 43210",
@@ -84,36 +84,8 @@ def seed_data():
         if db.query(Video).count() > 0:
             return
 
-        # ── Sample Videos ──────────────────────────────────────────────────
-        sample_videos = [
-            Video(
-                title="Cinematic Wedding Highlight — Parth & Neha",
-                youtube_url="https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                category="wedding",
-                description="A beautiful wedding film shot in Udaipur with cinematic color grading.",
-                is_featured=True,
-                sort_order=1,
-            ),
-            Video(
-                title="Urban Cinematic Short Film",
-                youtube_url="https://www.youtube.com/watch?v=jNQXAC9IVRw",
-                category="cinematic",
-                description="A cinematic short exploring the streets of Surat at golden hour.",
-                is_featured=True,
-                sort_order=2,
-            ),
-            Video(
-                title="Instagram Reel — Product Showcase",
-                youtube_url="https://www.youtube.com/watch?v=9bZkp7q19f0",
-                category="reels",
-                description="Quick-paced product showcase reel with dynamic transitions.",
-                is_featured=True,
-                sort_order=3,
-            ),
-        ]
-        for v in sample_videos:
-            v.generate_thumbnail()
-            db.add(v)
+        # No sample YouTube videos — only user-uploaded videos will be shown
+        # (Seed video section removed to keep site clean)
 
         # ── Sample Pricing Plans ───────────────────────────────────────────
         db.add_all([
@@ -177,7 +149,7 @@ Consistency across shots is more important than any single grade. Use DaVinci Re
 
 ---
 
-*Happy grading! — Parth*
+*Happy grading! — Aurevia Films*
 """,
             cover_image_url="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800",
             category="tips",

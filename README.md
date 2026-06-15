@@ -1,4 +1,4 @@
-# 🎬 Parth Edits — Portfolio & Booking Platform
+# 🎬 Aurevia Films — Portfolio & Booking Platform
 
 A full-stack portfolio website for a professional video editor, featuring a cinematic design, admin dashboard, blog, pricing, and client enquiry system.
 

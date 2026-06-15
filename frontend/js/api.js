@@ -9,6 +9,18 @@ const BACKEND_URL = "https://parth-edits-api.onrender.com";
 const BASE_URL = IS_LOCAL ? window.location.origin : BACKEND_URL;
 
 /**
+ * Resolve relative /uploads/ paths to the Render backend URL.
+ * Fixes thumbnails and videos not loading on Vercel deployment.
+ */
+function resolveUploadUrl(url) {
+    if (!url) return url;
+    if (url.startsWith("/uploads/") && !IS_LOCAL) {
+        return BACKEND_URL + url;
+    }
+    return url;
+}
+
+/**
  * Extract YouTube video ID from any common URL format.
  * Supports: youtube.com/watch?v=, youtu.be/, youtube.com/embed/, youtube.com/shorts/
  */
@@ -303,17 +315,11 @@ async function applySiteSettings() {
 
         if (settings.site_name) {
             document.querySelectorAll(".setting-site_name").forEach(el => {
+                // Skip logo elements that use the image logo
                 if (el.tagName === "SPAN" && el.classList.contains("logo-accent")) {
-                    // special logo rendering
-                    const words = settings.site_name.split(" ");
-                    if (words.length > 1) {
-                        el.parentElement.innerHTML = `<span class="nav-logo-icon">${words[0][0]}</span> ${words[0]} <span class="logo-accent">${words.slice(1).join(" ")}</span>`;
-                    } else {
-                        el.parentElement.innerHTML = `<span class="nav-logo-icon">${settings.site_name[0]}</span> ${settings.site_name}`;
-                    }
-                } else {
-                    el.textContent = settings.site_name;
+                    return; // Logo is now image-based, skip text replacement
                 }
+                el.textContent = settings.site_name;
             });
         }
         if (settings.tagline) {

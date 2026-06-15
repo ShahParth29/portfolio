@@ -62,9 +62,10 @@ function renderVideoGrid(videos) {
 
     grid.innerHTML = videos
         .map((v) => {
-            const thumbnail = v.thumbnail_url || (v.youtube_url ? getYouTubeThumbnail(v.youtube_url) : "") || "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800";
+            const thumbnail = resolveUploadUrl(v.thumbnail_url) || (v.youtube_url ? getYouTubeThumbnail(v.youtube_url) : "") || "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800";
+            const videoFile = resolveUploadUrl(v.video_file_url || '');
             return `
-            <div class="video-card glass-card fade-in" onclick="openLightbox('${v.youtube_url || ''}', '${v.video_file_url || ''}')">
+            <div class="video-card glass-card fade-in" onclick="openLightbox('${v.youtube_url || ''}', '${videoFile}')">
                 <div class="video-card-thumb">
                     <img src="${thumbnail}" alt="${v.title}" loading="lazy">
                     <div class="video-card-play"></div>
@@ -97,10 +98,8 @@ function openLightbox(youtubeUrl, videoFileUrl) {
 
     if (videoFileUrl || (youtubeUrl && (youtubeUrl.startsWith("/uploads/") || youtubeUrl.endsWith(".mp4") || youtubeUrl.endsWith(".mov")))) {
         let url = videoFileUrl || youtubeUrl;
-        // Resolve relative /uploads/ paths to Render backend for direct streaming
-        if (url.startsWith("/uploads/") && typeof BACKEND_URL !== "undefined" && !IS_LOCAL) {
-            url = BACKEND_URL + url;
-        }
+        // Resolve relative /uploads/ paths to Render backend
+        url = resolveUploadUrl(url);
         if (iframe) iframe.style.display = "none";
 
         videoEl = document.createElement("video");

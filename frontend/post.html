@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Post — Parth Edits</title>
-    <meta name="description" content="Read the latest video editing tips and behind-the-scenes stories from Parth Edits.">
+    <title>Blog Post — Aurevia Films</title>
+    <meta name="description" content="Read the latest video editing tips and behind-the-scenes stories from Aurevia Films.">
     <link rel="stylesheet" href="css/style.css">
     <!-- marked.js for rendering markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -18,8 +18,7 @@
     <nav class="navbar" id="navbar">
         <div class="container">
             <a href="index.html" class="nav-logo">
-                <span class="nav-logo-icon">P</span>
-                PARTH <span class="logo-accent setting-site_name">EDITS</span>
+                <img src="img/logo.png" alt="Aurevia Films" class="nav-logo-img">
             </a>
             <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
                 <span></span><span></span><span></span>
@@ -73,7 +72,7 @@
     <footer class="footer" style="margin-top: 40px;">
         <div class="container">
             <div class="footer-bottom">
-                &copy; 2026 <span class="setting-site_name">Parth Edits</span>. All rights reserved.
+                &copy; 2026 <span class="setting-site_name">Aurevia Films</span>. All rights reserved.
             </div>
         </div>
     </footer>
@@ -120,7 +119,7 @@
                 const post = await fetchBlogPost(slug);
 
                 // Set page title
-                document.title = `${post.title} — Parth Edits`;
+                document.title = `${post.title} — Aurevia Films`;
 
                 // Fill in content
                 document.getElementById("post-title").textContent = post.title;
