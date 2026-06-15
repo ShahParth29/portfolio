@@ -4,6 +4,9 @@
 
 const BASE_URL = window.location.origin;
 
+// Direct backend URL for file uploads (bypasses Vercel's 4.5MB body size limit)
+const BACKEND_URL = "https://parth-edits-api.onrender.com";
+
 /**
  * Extract YouTube video ID from any common URL format.
  * Supports: youtube.com/watch?v=, youtu.be/, youtube.com/embed/, youtube.com/shorts/
@@ -395,7 +398,8 @@ async function uploadFile(file) {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch(`${BASE_URL}/api/videos/upload`, {
+    // Upload directly to Render backend (Vercel proxy has 4.5MB body limit)
+    const res = await fetch(`${BACKEND_URL}/api/videos/upload`, {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${getAuthToken()}`
