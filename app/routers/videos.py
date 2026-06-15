@@ -1,6 +1,4 @@
 import os
-import shutil
-import time
 from typing import List, Optional, Dict
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status, UploadFile, File
@@ -8,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.core.auth import get_current_admin
+from app.core.storage import upload_file_to_storage
 from app.models.models import Video
 from app.schemas.schemas import VideoCreate, VideoUpdate, VideoOut, MessageResponse
 
@@ -16,6 +15,8 @@ from app.core.config import get_settings
 router = APIRouter(prefix="/api/videos", tags=["Videos"])
 
 settings = get_settings()
+
+# Ensure local upload dirs exist (used when STORAGE_BACKEND=local)
 UPLOAD_DIR = settings.UPLOAD_DIR
 VIDEOS_DIR = os.path.join(UPLOAD_DIR, "videos")
 THUMBNAILS_DIR = os.path.join(UPLOAD_DIR, "thumbnails")
@@ -29,26 +30,15 @@ def upload_file(
     file: UploadFile = File(...),
     admin: dict = Depends(get_current_admin),
 ):
-    # Determine directory based on file extension
-    ext = os.path.splitext(file.filename)[1].lower()
-    is_video = ext in [".mp4", ".mov", ".avi", ".mkv", ".webm"]
-    is_image = ext in [".jpg", ".jpeg", ".png", ".webp", ".gif"]
-
-    if not is_video and not is_image:
-        raise HTTPException(status_code=400, detail="Unsupported file format")
-
-    target_dir = VIDEOS_DIR if is_video else THUMBNAILS_DIR
-    filename = f"{int(time.time())}_{os.path.basename(file.filename)}"
-    filepath = os.path.join(target_dir, filename)
-
+    """Upload a video or image file. Uses Cloudinary or local storage based on config."""
     try:
-        with open(filepath, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
+        url = upload_file_to_storage(file.file, file.filename)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Failed to save file: {exc}")
+        raise HTTPException(status_code=500, detail=f"Failed to upload file: {exc}")
 
-    relative_path = f"/uploads/{'videos' if is_video else 'thumbnails'}/{filename}"
-    return {"url": relative_path}
+    return {"url": url}
 
 
 

@@ -1,4 +1,4 @@
-# 🎬 Aurevia Films — Portfolio & Booking Platform
+# 🎬 NextFrame Studios — Portfolio & Booking Platform
 
 A full-stack portfolio website for a professional video editor, featuring a cinematic design, admin dashboard, blog, pricing, and client enquiry system.
 
@@ -10,6 +10,7 @@ A full-stack portfolio website for a professional video editor, featuring a cine
 | **Backend** | Python, FastAPI, SQLAlchemy |
 | **Database** | SQLite (dev) |
 | **Auth** | JWT (HS256) with bcrypt password hashing |
+| **Storage** | Local filesystem or Cloudinary CDN |
 | **Email** | Gmail SMTP (optional) |
 | **Deployment** | Vercel (frontend) + Render (backend) |
 
@@ -62,6 +63,10 @@ All sensitive configuration is managed through environment variables. **Never co
 | `EMAIL_FROM` | ❌ | Sender email address |
 | `EMAIL_TO` | ❌ | Recipient email for enquiry notifications |
 | `CORS_ORIGINS` | ❌ | Comma-separated allowed origins. Default: `*` |
+| `STORAGE_BACKEND` | ❌ | `local` (default) or `cloudinary` |
+| `CLOUDINARY_CLOUD_NAME` | ❌* | Cloudinary cloud name (*required if using Cloudinary) |
+| `CLOUDINARY_API_KEY` | ❌* | Cloudinary API key |
+| `CLOUDINARY_API_SECRET` | ❌* | Cloudinary API secret |
 
 ---
 
@@ -105,7 +110,8 @@ portfolio/
 │   │   ├── auth.py         # JWT authentication
 │   │   ├── config.py       # Settings (from env vars)
 │   │   ├── database.py     # SQLAlchemy setup
-│   │   └── email.py        # SMTP email sender
+│   │   ├── email.py        # SMTP email sender
+│   │   └── storage.py      # File storage (local / Cloudinary)
 │   ├── models/
 │   │   └── models.py       # Database models
 │   ├── routers/

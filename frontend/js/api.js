@@ -10,10 +10,16 @@ const BASE_URL = IS_LOCAL ? window.location.origin : BACKEND_URL;
 
 /**
  * Resolve relative /uploads/ paths to the Render backend URL.
+ * Cloudinary URLs (absolute https://) are returned as-is.
  * Fixes thumbnails and videos not loading on Vercel deployment.
  */
 function resolveUploadUrl(url) {
     if (!url) return url;
+    // Cloudinary or other absolute URLs — return as-is
+    if (url.startsWith("https://") || url.startsWith("http://")) {
+        return url;
+    }
+    // Relative /uploads/ paths — prefix with backend URL when on Vercel
     if (url.startsWith("/uploads/") && !IS_LOCAL) {
         return BACKEND_URL + url;
     }
@@ -438,14 +444,7 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-// Periodically run debugger statement to halt execution if devtools is open
-setInterval(() => {
-    (function() {
-        try {
-            (function() {}).constructor("debugger")();
-        } catch (e) {}
-    })();
-}, 1000);
+
 
 /* ── Global Fetch Interceptor to catch 401 Unauthorized errors ─────────────── */
 const originalFetch = window.fetch;

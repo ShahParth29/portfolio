@@ -14,8 +14,8 @@ settings_cfg = get_settings()
 
 # ── App ────────────────────────────────────────────────────────────────────────
 app = FastAPI(
-    title="Aurevia Films — Portfolio API",
-    description="Backend API for Aurevia Films video production portfolio",
+    title="NextFrame Studios — Portfolio API",
+    description="Backend API for NextFrame Studios video production portfolio",
     version="1.0.0",
     docs_url=None,
     redoc_url=None,
@@ -53,7 +53,7 @@ app.include_router(settings.router)
 
 @app.get("/api/health")
 def health_check():
-    return {"status": "ok", "service": "Aurevia Films API"}
+    return {"status": "ok", "service": "NextFrame Studios API"}
 
 
 # ── Seed Data ──────────────────────────────────────────────────────────────────
@@ -64,11 +64,11 @@ def seed_data():
         # Seed Settings if empty
         if db.query(SiteSettings).count() == 0:
             default_settings = {
-                "site_name": "Aurevia Films",
+                "site_name": "NextFrame Studios",
                 "tagline": "I turn moments into memories",
                 "email": "shahparth29980@gmail.com",
-                "phone": "+91 98765 43210",
-                "location": "Surat, Gujarat, India",
+                "phone": "+91 81410 50770",
+                "location": "Ahmedabad, Gujarat, India",
                 "youtube": "#",
                 "instagram": "#",
                 "twitter": "#",
@@ -149,7 +149,7 @@ Consistency across shots is more important than any single grade. Use DaVinci Re
 
 ---
 
-*Happy grading! — Aurevia Films*
+*Happy grading! — NextFrame Studios*
 """,
             cover_image_url="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800",
             category="tips",

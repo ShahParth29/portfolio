@@ -17,6 +17,14 @@ class Settings(BaseSettings):
     EMAIL_TO: str = "shahparth29980@gmail.com"
     UPLOAD_DIR: str = "frontend/uploads"
 
+    # Storage backend: "local" or "cloudinary"
+    STORAGE_BACKEND: str = "local"
+
+    # Cloudinary (required when STORAGE_BACKEND=cloudinary)
+    CLOUDINARY_CLOUD_NAME: str = ""
+    CLOUDINARY_API_KEY: str = ""
+    CLOUDINARY_API_SECRET: str = ""
+
     # Security
     CORS_ORIGINS: str = "*"  # Comma-separated origins for production
     LOGIN_RATE_LIMIT: int = 5  # Max login attempts per minute per IP
