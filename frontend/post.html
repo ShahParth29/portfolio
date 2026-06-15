@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post — Parth Edits</title>
+    <meta name="description" content="Read the latest video editing tips and behind-the-scenes stories from Parth Edits.">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- marked.js for rendering markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress-bar" id="scroll-progress"></div>
+
+    <!-- ── Navbar ──────────────────────────────────────────────────────────── -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-icon">P</span>
+                PARTH <span class="logo-accent setting-site_name">EDITS</span>
+            </a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
+                <li><a href="contact.html" class="nav-cta">Hire Me</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ── Single Post ────────────────────────────────────────────────────── -->
+    <main class="post-page">
+        <div class="container">
+            <div id="post-loading" class="loading"><div class="spinner"></div></div>
+
+            <div id="post-wrapper" style="display:none;">
+                <div class="post-header fade-in">
+                    <div class="blog-card-meta" style="justify-content:center; margin-bottom:16px;">
+                        <span class="category-badge" id="post-category"></span>
+                        <span style="color:var(--text-muted);font-size:0.85rem;" id="post-date"></span>
+                    </div>
+                    <h1 id="post-title"></h1>
+                </div>
+
+                <div class="post-cover fade-in" id="post-cover-wrap">
+                    <img id="post-cover" src="" alt="">
+                </div>
+
+                <div class="post-content fade-in" id="post-content"></div>
+
+                <div style="text-align:center; margin-top:60px; padding-bottom:40px;" class="fade-in">
+                    <a href="blog.html" class="btn btn-secondary">← Back to Blog</a>
+                </div>
+            </div>
+
+            <div id="post-error" style="display:none;" class="empty-state">
+                <div class="icon">😔</div>
+                <p>Post not found. It may have been removed or the URL is incorrect.</p>
+                <br>
+                <a href="blog.html" class="btn btn-secondary">← Back to Blog</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+    <footer class="footer" style="margin-top: 40px;">
+        <div class="container">
+            <div class="footer-bottom">
+                &copy; 2026 <span class="setting-site_name">Parth Edits</span>. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ── Scripts ─────────────────────────────────────────────────────────── -->
+    <script src="js/api.js"></script>
+    <script>
+        /* ── Scroll Progress Indicator ──────────────────────────────────────── */
+        window.addEventListener("scroll", () => {
+            const scrollProgress = document.getElementById("scroll-progress");
+            if (scrollProgress) {
+                const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+                if (totalHeight > 0) {
+                    const progress = (window.scrollY / totalHeight) * 100;
+                    scrollProgress.style.width = progress + "%";
+                }
+            }
+        });
+
+        /* Nav toggle */
+        const navToggle = document.getElementById("nav-toggle");
+        const navLinks = document.getElementById("nav-links");
+        navToggle.addEventListener("click", () => {
+            navToggle.classList.toggle("active");
+            navLinks.classList.toggle("open");
+        });
+
+        window.addEventListener("scroll", () => {
+            document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50);
+        });
+
+        /* ── Load Single Post ──────────────────────────────────────────────── */
+        async function loadPost() {
+            const params = new URLSearchParams(window.location.search);
+            const slug = params.get("slug");
+
+            if (!slug) {
+                document.getElementById("post-loading").style.display = "none";
+                document.getElementById("post-error").style.display = "block";
+                return;
+            }
+
+            try {
+                const post = await fetchBlogPost(slug);
+
+                // Set page title
+                document.title = `${post.title} — Parth Edits`;
+
+                // Fill in content
+                document.getElementById("post-title").textContent = post.title;
+                document.getElementById("post-category").textContent = post.category;
+                document.getElementById("post-date").textContent = new Date(post.created_at).toLocaleDateString('en-IN', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+
+                // Cover image
+                if (post.cover_image_url) {
+                    document.getElementById("post-cover").src = post.cover_image_url;
+                    document.getElementById("post-cover").alt = post.title;
+                } else {
+                    document.getElementById("post-cover-wrap").style.display = "none";
+                }
+
+                // Render markdown
+                document.getElementById("post-content").innerHTML = marked.parse(post.content);
+
+                // Show content
+                document.getElementById("post-loading").style.display = "none";
+                document.getElementById("post-wrapper").style.display = "block";
+
+                // Trigger fade-in
+                const obs = new IntersectionObserver(
+                    (entries) => entries.forEach((e) => {
+                        if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); }
+                    }),
+                    { threshold: 0.1 }
+                );
+                document.querySelectorAll(".fade-in").forEach((el) => obs.observe(el));
+
+            } catch (err) {
+                document.getElementById("post-loading").style.display = "none";
+                document.getElementById("post-error").style.display = "block";
+                console.error(err);
+            }
+        }
+
+        loadPost();
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Old embedded repo
+Editing_Protfolio/
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Database
+*.db
+*.sqlite3
+
+# Uploaded user content (auto-created at runtime)
+frontend/uploads/videos/*
+frontend/uploads/thumbnails/*
+!frontend/uploads/videos/.gitkeep
+!frontend/uploads/thumbnails/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dist
+dist/
+build/
+*.egg-info/
+
+# Vercel
+.vercel/
+
+# Node (if any tooling added later)
+node_modules/

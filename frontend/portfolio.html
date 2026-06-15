@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio — Parth Edits</title>
+    <meta name="description" content="Browse Parth's video editing portfolio. Cinematic films, wedding highlights, YouTube reels, and Instagram shorts.">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress-bar" id="scroll-progress"></div>
+
+    <!-- ── Navbar ──────────────────────────────────────────────────────────── -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-icon">P</span>
+                PARTH <span class="logo-accent setting-site_name">EDITS</span>
+            </a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="portfolio.html" class="active">Portfolio</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html" class="nav-cta">Hire Me</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ── Page Content ───────────────────────────────────────────────────── -->
+    <main class="contact-page">
+        <div class="container">
+            <div class="page-header fade-in animate-entrance stagger-1">
+                <h1>My <span class="accent-text">Portfolio</span></h1>
+                <p>Explore my collection of cinematic edits, wedding films, and viral reels</p>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar fade-in animate-entrance stagger-2" id="filter-bar">
+                <button class="filter-btn active" data-category="all">All</button>
+                <button class="filter-btn" data-category="cinematic">Cinematic</button>
+                <button class="filter-btn" data-category="reels">Reels</button>
+                <button class="filter-btn" data-category="wedding">Wedding</button>
+            </div>
+
+            <!-- Video Grid -->
+            <div class="video-grid animate-entrance stagger-3" id="video-grid">
+                <div class="loading"><div class="spinner"></div></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ── Lightbox ───────────────────────────────────────────────────────── -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+        <div class="lightbox-content">
+            <iframe id="lightbox-iframe" src="" allowfullscreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+        </div>
+    </div>
+
+    <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                &copy; 2026 <span class="setting-site_name">Parth Edits</span>. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ── Scripts ─────────────────────────────────────────────────────────── -->
+    <script src="js/api.js"></script>
+    <script src="js/gallery.js"></script>
+    <script>
+        /* ── Scroll Progress Indicator ──────────────────────────────────────── */
+        window.addEventListener("scroll", () => {
+            const scrollProgress = document.getElementById("scroll-progress");
+            if (scrollProgress) {
+                const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+                if (totalHeight > 0) {
+                    const progress = (window.scrollY / totalHeight) * 100;
+                    scrollProgress.style.width = progress + "%";
+                }
+            }
+        });
+
+        /* Nav toggle */
+        const navToggle = document.getElementById("nav-toggle");
+        const navLinks = document.getElementById("nav-links");
+        navToggle.addEventListener("click", () => {
+            navToggle.classList.toggle("active");
+            navLinks.classList.toggle("open");
+        });
+
+        window.addEventListener("scroll", () => {
+            document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50);
+        });
+
+        /* Fade-in observer */
+        const observer = new IntersectionObserver(
+            (entries) => entries.forEach((e) => {
+                if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); }
+            }),
+            { threshold: 0.15 }
+        );
+        document.querySelectorAll(".fade-in").forEach((el) => observer.observe(el));
+
+        /* Init Gallery */
+        initGallery();
+    </script>
+</body>
+</html>

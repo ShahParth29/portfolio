@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parth Edits — Cinematic Video Editor</title>
+    <meta name="description" content="Professional video editing portfolio by Parth. Cinematic films, YouTube reels, wedding videos. Hire a skilled editor for your next project.">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress-bar" id="scroll-progress"></div>
+
+    <!-- ── Navbar ──────────────────────────────────────────────────────────── -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-icon">P</span>
+                PARTH <span class="logo-accent setting-site_name">EDITS</span>
+            </a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html" class="nav-cta">Hire Me</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ── Hero Section ───────────────────────────────────────────────────── -->
+    <section class="hero">
+        <!-- Floating Particle Background Orbs -->
+        <div class="hero-orbs-container">
+            <div class="floating-orb floating-orb-1"></div>
+            <div class="floating-orb floating-orb-2"></div>
+            <div class="floating-orb floating-orb-3"></div>
+        </div>
+        <div class="hero-content animate-entrance stagger-1">
+            <div class="hero-badge animate-entrance stagger-2">Available for Projects</div>
+            <h1 class="animate-entrance stagger-3">I turn moments into <span class="gradient-text">memories</span></h1>
+            <p class="setting-tagline animate-entrance stagger-4">Professional video editor crafting cinematic stories that captivate audiences and leave lasting impressions.</p>
+            <div class="hero-tags animate-entrance stagger-4">
+                <span>Cinematic Films</span>
+                <span class="dot"></span>
+                <span>YouTube Reels</span>
+                <span class="dot"></span>
+                <span>Wedding Videos</span>
+            </div>
+
+            <div class="hero-buttons animate-entrance stagger-5">
+                <a href="portfolio.html" class="btn btn-primary btn-glow-pulse">See My Work →</a>
+                <a href="contact.html" class="btn btn-secondary">Hire Me</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Featured Videos ────────────────────────────────────────────────── -->
+    <section class="section" id="featured-section">
+        <div class="container">
+            <h2 class="section-title fade-in">Featured <span class="accent-text">Work</span></h2>
+            <p class="section-subtitle fade-in">Hand-picked projects that showcase my best editing work</p>
+            <div class="featured-grid" id="featured-grid">
+                <div class="loading"><div class="spinner"></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Tools Strip ────────────────────────────────────────────────────── -->
+    <section class="tools-strip section" style="padding: 60px 0;">
+        <div class="container">
+            <h2 class="section-title fade-in" style="margin-bottom: 40px;">Tools I <span class="accent-text">Master</span></h2>
+            <div class="tools-grid">
+                <div class="tool-badge fade-in">
+                    <span class="tool-icon">🎬</span> Adobe Premiere Pro
+                </div>
+                <div class="tool-badge fade-in">
+                    <span class="tool-icon">🎨</span> DaVinci Resolve
+                </div>
+                <div class="tool-badge fade-in">
+                    <span class="tool-icon">✨</span> After Effects
+                </div>
+                <div class="tool-badge fade-in">
+                    <span class="tool-icon">🖼️</span> Adobe Photoshop
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Stats Section ──────────────────────────────────────────────────── -->
+    <section class="stats-section section" style="padding: 80px 0;">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-target="50">0</div>
+                    <div class="stat-label">Videos Edited</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-target="30">0</div>
+                    <div class="stat-label">Happy Clients</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-target="3">0</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Lightbox ───────────────────────────────────────────────────────── -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+        <div class="lightbox-content">
+            <iframe id="lightbox-iframe" src="" allowfullscreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+        </div>
+    </div>
+
+    <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="nav-logo">
+                        <span class="nav-logo-icon">P</span>
+                        PARTH <span class="logo-accent setting-site_name">EDITS</span>
+                    </a>
+                    <p class="setting-about_text">Professional video editor specializing in cinematic films, reels, and wedding videos. Turning your raw footage into visual stories.</p>
+                    <div class="footer-social">
+                        <a href="#" title="YouTube" class="setting-youtube">▶</a>
+                        <a href="#" title="Instagram" class="setting-instagram">📷</a>
+                        <a href="#" title="Twitter" class="setting-twitter">𝕏</a>
+                    </div>
+                </div>
+                <div>
+                    <h4>Pages</h4>
+                    <ul class="footer-links">
+                        <li><a href="portfolio.html">Portfolio</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:parth@example.com" class="setting-email">parth@example.com</a></li>
+                        <li><a href="tel:+919876543210" class="setting-phone">+91 98765 43210</a></li>
+                        <li class="setting-location" style="color: var(--text-secondary); font-size: 0.9rem;">Surat, Gujarat, India</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 <span class="setting-site_name">Parth Edits</span>. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ── Scripts ─────────────────────────────────────────────────────────── -->
+    <script src="js/api.js"></script>
+    <script src="js/gallery.js"></script>
+    <script>
+        /* ── Scroll Progress Indicator ──────────────────────────────────────── */
+        window.addEventListener("scroll", () => {
+            const scrollProgress = document.getElementById("scroll-progress");
+            if (scrollProgress) {
+                const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+                if (totalHeight > 0) {
+                    const progress = (window.scrollY / totalHeight) * 100;
+                    scrollProgress.style.width = progress + "%";
+                }
+            }
+        });
+
+        /* ── Mobile Nav Toggle ──────────────────────────────────────────────── */
+        const navToggle = document.getElementById("nav-toggle");
+        const navLinks = document.getElementById("nav-links");
+        navToggle.addEventListener("click", () => {
+            navToggle.classList.toggle("active");
+            navLinks.classList.toggle("open");
+        });
+
+        /* ── Navbar scroll effect ───────────────────────────────────────────── */
+        window.addEventListener("scroll", () => {
+            document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50);
+        });
+
+        /* ── Intersection Observer for fade-in ──────────────────────────────── */
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.15 }
+        );
+
+        document.querySelectorAll(".fade-in, .fade-in-left, .fade-in-right").forEach((el) => {
+            observer.observe(el);
+        });
+
+        /* ── Animated Stats Counter ─────────────────────────────────────────── */
+        const statsObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        const target = parseInt(el.dataset.target);
+                        let current = 0;
+                        const step = Math.max(1, Math.floor(target / 60));
+                        const timer = setInterval(() => {
+                            current += step;
+                            if (current >= target) {
+                                current = target;
+                                clearInterval(timer);
+                            }
+                            el.textContent = current + "+";
+                        }, 25);
+                        statsObserver.unobserve(el);
+                    }
+                });
+            },
+            { threshold: 0.5 }
+        );
+
+        document.querySelectorAll(".stat-number[data-target]").forEach((el) => {
+            statsObserver.observe(el);
+        });
+
+        /* ── Load Featured Videos ───────────────────────────────────────────── */
+        async function loadFeatured() {
+            const grid = document.getElementById("featured-grid");
+            try {
+                const videos = await fetchFeaturedVideos();
+                if (videos.length === 0) {
+                    grid.innerHTML = '<div class="empty-state"><p>No featured videos yet.</p></div>';
+                    return;
+                }
+                grid.innerHTML = videos
+                    .map((v) => {
+                        const thumb = v.thumbnail_url || (v.youtube_url ? getYouTubeThumbnail(v.youtube_url) : "") || "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800";
+                        return `
+                        <div class="video-card glass-card fade-in" onclick="openLightbox('${v.youtube_url || ''}', '${v.video_file_url || ''}')">
+                            <div class="video-card-thumb">
+                                <img src="${thumb}" alt="${v.title}" loading="lazy">
+                                <div class="video-card-play"></div>
+                            </div>
+                            <div class="video-card-body">
+                                <span class="category-badge">${v.category}</span>
+                                <h3>${v.title}</h3>
+                            </div>
+                        </div>`;
+                    })
+                    .join("");
+
+                requestAnimationFrame(() => {
+                    grid.querySelectorAll(".fade-in").forEach((el, i) => {
+                        setTimeout(() => el.classList.add("visible"), i * 120);
+                    });
+                });
+            } catch (err) {
+                grid.innerHTML = '<div class="empty-state"><p>Could not load featured videos.</p></div>';
+                console.error(err);
+            }
+        }
+
+        /* ── Load Showreel and Settings ───────────────────────────────────────── */
+        let showreelUrl = "";
+        let showreelFileUrl = "https://assets.mixkit.co/videos/preview/mixkit-cinematographer-working-with-a-professional-camera-34503-large.mp4";
+
+        async function initHome() {
+            try {
+                // Fetch all videos to find the absolute latest upload
+                const videos = await fetchVideos();
+                if (videos.length > 0) {
+                    // Sort by id descending to get the absolute latest uploaded video
+                    videos.sort((a, b) => b.id - a.id);
+                    showreelUrl = videos[0].youtube_url || "";
+                    showreelFileUrl = videos[0].video_file_url || "";
+                    const thumb = videos[0].thumbnail_url || (videos[0].youtube_url ? getYouTubeThumbnail(videos[0].youtube_url) : "");
+                    if (thumb) {
+                        const showreelCard = document.getElementById("home-showreel-card");
+                        if (showreelCard) {
+                            showreelCard.style.backgroundImage = `url('${thumb}')`;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.log("Error loading latest video for showreel:", e);
+            }
+
+            // Set showreel onclick handler
+            const showreelCard = document.getElementById("home-showreel-card");
+            if (showreelCard) {
+                showreelCard.onclick = () => {
+                    openLightbox(showreelUrl, showreelFileUrl);
+                };
+            }
+
+            // Load featured work grid
+            await loadFeatured();
+        }
+
+        initHome();
+    </script>
+</body>
+</html>
