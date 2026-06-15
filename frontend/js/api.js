@@ -2,10 +2,11 @@
    API Helper — All fetch calls to FastAPI backend
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-const BASE_URL = window.location.origin;
-
-// Direct backend URL for file uploads (bypasses Vercel's 4.5MB body size limit)
+// When running on Vercel (production), call the Render backend directly.
+// When running locally (localhost), call the same origin (FastAPI serves frontend).
+const IS_LOCAL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 const BACKEND_URL = "https://parth-edits-api.onrender.com";
+const BASE_URL = IS_LOCAL ? window.location.origin : BACKEND_URL;
 
 /**
  * Extract YouTube video ID from any common URL format.
@@ -398,7 +399,7 @@ async function uploadFile(file) {
     const formData = new FormData();
     formData.append("file", file);
 
-    // Upload directly to Render backend (Vercel proxy has 4.5MB body limit)
+    // Upload directly to Render backend (bypasses Vercel's 4.5MB body limit)
     const res = await fetch(`${BACKEND_URL}/api/videos/upload`, {
         method: "POST",
         headers: {

@@ -6,6 +6,10 @@
     {
       "source": "/api/:path(.*)",
       "destination": "https://parth-edits-api.onrender.com/api/:path"
+    },
+    {
+      "source": "/uploads/:path(.*)",
+      "destination": "https://parth-edits-api.onrender.com/uploads/:path"
     }
   ],
   "headers": [

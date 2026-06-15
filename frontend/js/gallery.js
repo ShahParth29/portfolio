@@ -96,7 +96,11 @@ function openLightbox(youtubeUrl, videoFileUrl) {
     if (videoEl) videoEl.remove();
 
     if (videoFileUrl || (youtubeUrl && (youtubeUrl.startsWith("/uploads/") || youtubeUrl.endsWith(".mp4") || youtubeUrl.endsWith(".mov")))) {
-        const url = videoFileUrl || youtubeUrl;
+        let url = videoFileUrl || youtubeUrl;
+        // Resolve relative /uploads/ paths to Render backend for direct streaming
+        if (url.startsWith("/uploads/") && typeof BACKEND_URL !== "undefined" && !IS_LOCAL) {
+            url = BACKEND_URL + url;
+        }
         if (iframe) iframe.style.display = "none";
 
         videoEl = document.createElement("video");
