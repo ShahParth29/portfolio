@@ -14,7 +14,8 @@ class Settings(BaseSettings):
     SMTP_USER: str = ""
     SMTP_PASSWORD: str = ""
     EMAIL_FROM: str = ""
-    EMAIL_TO: str = ""
+    EMAIL_TO: str = "shahparth29980@gmail.com"
+    UPLOAD_DIR: str = "frontend/uploads"
 
     # Security
     CORS_ORIGINS: str = "*"  # Comma-separated origins for production

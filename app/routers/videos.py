@@ -11,9 +11,12 @@ from app.core.auth import get_current_admin
 from app.models.models import Video
 from app.schemas.schemas import VideoCreate, VideoUpdate, VideoOut, MessageResponse
 
+from app.core.config import get_settings
+
 router = APIRouter(prefix="/api/videos", tags=["Videos"])
 
-UPLOAD_DIR = os.path.join("frontend", "uploads")
+settings = get_settings()
+UPLOAD_DIR = settings.UPLOAD_DIR
 VIDEOS_DIR = os.path.join(UPLOAD_DIR, "videos")
 THUMBNAILS_DIR = os.path.join(UPLOAD_DIR, "thumbnails")
 

@@ -66,7 +66,7 @@ def seed_data():
             default_settings = {
                 "site_name": "Aurevia Films",
                 "tagline": "I turn moments into memories",
-                "email": "parth@example.com",
+                "email": "shahparth29980@gmail.com",
                 "phone": "+91 98765 43210",
                 "location": "Surat, Gujarat, India",
                 "youtube": "#",
@@ -168,8 +168,13 @@ Consistency across shots is more important than any single grade. Use DaVinci Re
 seed_data()
 
 
-# ── Serve frontend (optional, for local dev) ───────────────────────────────────
+# ── Serve uploads and frontend (optional, for local dev) ──────────────────────
 import os
+
+upload_dir = settings_cfg.UPLOAD_DIR
+os.makedirs(upload_dir, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=upload_dir), name="uploads")
+
 frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
 if os.path.isdir(frontend_dir):
     app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")

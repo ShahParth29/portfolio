@@ -2,12 +2,23 @@ services:
   - type: web
     name: parth-edits-api
     env: python
-    plan: free
+    plan: free # Change to starter to support persistent disks
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    
+    # To enable persistent storage for uploads & database:
+    # 1. Change plan from 'free' to 'starter'
+    # 2. Uncomment the 'disk' section below:
+    # disk:
+    #   name: portfolio-data
+    #   mountPath: /data
+    #   sizeGB: 1
+
     envVars:
       - key: DATABASE_URL
-        value: sqlite:///./portfolio.db
+        value: sqlite:///./portfolio.db # Change to sqlite:////data/portfolio.db if using persistent disk
+      - key: UPLOAD_DIR
+        value: frontend/uploads # Change to /data/uploads if using persistent disk
       - key: SECRET_KEY
         generateValue: true
       - key: ADMIN_USERNAME
@@ -21,4 +32,5 @@ services:
       - key: EMAIL_FROM
         sync: false
       - key: EMAIL_TO
-        sync: false
+        value: shahparth29980@gmail.com
+
