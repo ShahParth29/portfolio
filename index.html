@@ -19,15 +19,7 @@
     <nav class="navbar" id="navbar">
         <div class="container">
             <a href="index.html" class="nav-logo">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.5s ease;" onmouseover="this.style.transform='rotate(90deg)'" onmouseout="this.style.transform='rotate(0deg)'">
-                    <circle cx="16" cy="16" r="13" />
-                    <circle cx="16" cy="16" r="5" fill="var(--accent)" fill-opacity="0.2" />
-                    <path d="M16 3L11 11" />
-                    <path d="M3 16L11 21" />
-                    <path d="M16 29L21 21" />
-                    <path d="M29 16L21 11" />
-                </svg>
-                <span class="setting-site_name">Dhruvam Productions</span>
+                <img src="img/logo.png" alt="Dhruvam Productions" class="nav-logo-img">
             </a>
             <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
                 <span></span><span></span><span></span>
@@ -45,11 +37,18 @@
 
     <!-- ── Hero Section ───────────────────────────────────────────────────── -->
     <section class="hero">
-        <!-- Floating Particle Background Orbs -->
-        <div class="hero-orbs-container">
-            <div class="floating-orb floating-orb-1"></div>
-            <div class="floating-orb floating-orb-2"></div>
-            <div class="floating-orb floating-orb-3"></div>
+        <!-- Cinematic Viewfinder Frame -->
+        <div class="viewfinder-frame">
+            <div class="viewfinder-corner top-left"></div>
+            <div class="viewfinder-corner top-right"></div>
+            <div class="viewfinder-corner bottom-left"></div>
+            <div class="viewfinder-corner bottom-right"></div>
+            <div class="viewfinder-status">
+                <span class="rec-dot"></span> REC
+            </div>
+            <div class="viewfinder-info-left">RAW 4K 24FPS</div>
+            <div class="viewfinder-info-right">ISO 400 &bull; F/2.8 &bull; 1/50</div>
+            <div class="viewfinder-crosshair"></div>
         </div>
         <div class="hero-content animate-entrance stagger-1">
             <div class="hero-badge animate-entrance stagger-2">Available for Projects</div>
@@ -142,15 +141,7 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <a href="index.html" class="nav-logo">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.5s ease;" onmouseover="this.style.transform='rotate(90deg)'" onmouseout="this.style.transform='rotate(0deg)'">
-                            <circle cx="16" cy="16" r="13" />
-                            <circle cx="16" cy="16" r="5" fill="var(--accent)" fill-opacity="0.2" />
-                            <path d="M16 3L11 11" />
-                            <path d="M3 16L11 21" />
-                            <path d="M16 29L21 21" />
-                            <path d="M29 16L21 11" />
-                        </svg>
-                        <span class="setting-site_name">Dhruvam Productions</span>
+                        <img src="img/logo.png" alt="Dhruvam Productions" class="nav-logo-img" style="height: 64px;">
                     </a>
                     <p class="setting-about_text">Professional video editor specializing in cinematic films, reels, and
                         wedding videos. Turning your raw footage into visual stories.</p>
