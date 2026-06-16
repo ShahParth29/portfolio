@@ -2,11 +2,11 @@
    API Helper — All fetch calls to FastAPI backend
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-// When running on Vercel (production), call the Render backend directly.
-// When running locally (localhost), call the same origin (FastAPI serves frontend).
+// When running on Vercel (production), route JSON requests through Vercel's proxy
+// to avoid CORS and adblocker issues. File uploads still bypass Vercel due to body limits.
 const IS_LOCAL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 const BACKEND_URL = "https://parth-edits-api.onrender.com";
-const BASE_URL = IS_LOCAL ? window.location.origin : BACKEND_URL;
+const BASE_URL = window.location.origin;
 
 /**
  * Resolve relative /uploads/ paths to the Render backend URL.
