@@ -242,7 +242,7 @@ async function handleAddVideo(e) {
     }
 }
 
-async function deleteVideoAdmin(id) {
+window.deleteVideoAdmin = async function(id) {
     if (!confirm("Delete this video?")) return;
     try {
         await deleteVideo(id);
@@ -250,7 +250,7 @@ async function deleteVideoAdmin(id) {
     } catch (err) {
         alert(err.message);
     }
-}
+};
 
 window.editVideoAdmin = function(v) {
     document.getElementById("video-form-title").textContent = "✏️ Edit Video";
@@ -331,14 +331,14 @@ async function loadAdminEnquiries() {
     }
 }
 
-async function toggleRead(id) {
+window.toggleRead = async function(id) {
     try {
         await markEnquiryRead(id);
         loadAdminEnquiries();
     } catch (err) {
         alert(err.message);
     }
-}
+};
 
 /* ── Blog Panel ────────────────────────────────────────────────────────────── */
 
@@ -379,16 +379,16 @@ async function loadAdminBlog() {
     }
 }
 
-async function togglePublish(id, currentState) {
+window.togglePublish = async function(id, currentState) {
     try {
         await updateBlogPost(id, { is_published: !currentState });
         loadAdminBlog();
     } catch (err) {
         alert(err.message);
     }
-}
+};
 
-async function deleteBlogAdmin(id) {
+window.deleteBlogAdmin = async function(id) {
     if (!confirm("Delete this blog post?")) return;
     try {
         await deleteBlogPost(id);
@@ -396,7 +396,7 @@ async function deleteBlogAdmin(id) {
     } catch (err) {
         alert(err.message);
     }
-}
+};
 
 async function handleAddBlogPost(e) {
     e.preventDefault();
