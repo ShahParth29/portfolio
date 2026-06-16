@@ -212,11 +212,17 @@ seed_data()
 # ── Serve uploads and frontend (optional, for local dev) ──────────────────────
 import os
 
-upload_dir = settings_cfg.UPLOAD_DIR
-os.makedirs(upload_dir, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=upload_dir), name="uploads")
+try:
+    upload_dir = settings_cfg.UPLOAD_DIR
+    os.makedirs(upload_dir, exist_ok=True)
+    app.mount("/uploads", StaticFiles(directory=upload_dir), name="uploads")
+except Exception as e:
+    print(f"[STATIC] Local uploads dir creation skipped (likely read-only environment): {e}")
 
-frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
-if os.path.isdir(frontend_dir):
-    app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
+try:
+    frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
+    if os.path.isdir(frontend_dir):
+        app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
+except Exception as e:
+    print(f"[STATIC] Local frontend mounting skipped: {e}")
 
