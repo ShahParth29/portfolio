@@ -9,3 +9,4 @@ python-multipart
 aiosmtplib
 jinja2
 cloudinary
+psycopg2-binary
