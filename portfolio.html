@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio — Dhruvam Productions</title>
+    <meta name="description" content="Browse Dhruvam Productions' video production portfolio. Cinematic films, commercial clips, wedding documentaries, and creative reels.">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress-bar" id="scroll-progress"></div>
+
+    <!-- ── Navbar ──────────────────────────────────────────────────────────── -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.5s ease;" onmouseover="this.style.transform='rotate(90deg)'" onmouseout="this.style.transform='rotate(0deg)'">
+                    <circle cx="16" cy="16" r="13" />
+                    <circle cx="16" cy="16" r="5" fill="var(--accent)" fill-opacity="0.2" />
+                    <path d="M16 3L11 11" />
+                    <path d="M3 16L11 21" />
+                    <path d="M16 29L21 21" />
+                    <path d="M29 16L21 11" />
+                </svg>
+                <span class="setting-site_name">Dhruvam Productions</span>
+            </a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="portfolio.html" class="active">Portfolio</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html" class="nav-cta">Hire Me</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ── Page Content ───────────────────────────────────────────────────── -->
+    <main class="contact-page">
+        <div class="container">
+            <div class="page-header fade-in animate-entrance stagger-1">
+                <h1>My <span class="accent-text">Portfolio</span></h1>
+                <p>Explore my collection of cinematic edits, wedding films, and viral reels</p>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar fade-in animate-entrance stagger-2" id="filter-bar">
+                <button class="filter-btn active" data-category="all">All</button>
+                <button class="filter-btn" data-category="cinematic">Cinematic</button>
+                <button class="filter-btn" data-category="reels">Reels</button>
+                <button class="filter-btn" data-category="wedding">Wedding</button>
+            </div>
+
+            <!-- Video Grid -->
+            <div class="video-grid animate-entrance stagger-3" id="video-grid">
+                <div class="loading"><div class="spinner"></div></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ── Lightbox ───────────────────────────────────────────────────────── -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+        <div class="lightbox-content">
+            <iframe id="lightbox-iframe" src="" allowfullscreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+        </div>
+    </div>
+
+    <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                &copy; 2026 <span class="setting-site_name">Dhruvam Productions</span>. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ── Scripts ─────────────────────────────────────────────────────────── -->
+    <script src="js/api.js"></script>
+    <script src="js/gallery.js"></script>
+    <script>
+        /* ── Scroll Progress Indicator ──────────────────────────────────────── */
+        window.addEventListener("scroll", () => {
+            const scrollProgress = document.getElementById("scroll-progress");
+            if (scrollProgress) {
+                const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+                if (totalHeight > 0) {
+                    const progress = (window.scrollY / totalHeight) * 100;
+                    scrollProgress.style.width = progress + "%";
+                }
+            }
+        });
+
+        /* Nav toggle */
+        const navToggle = document.getElementById("nav-toggle");
+        const navLinks = document.getElementById("nav-links");
+        navToggle.addEventListener("click", () => {
+            navToggle.classList.toggle("active");
+            navLinks.classList.toggle("open");
+        });
+
+        window.addEventListener("scroll", () => {
+            document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50);
+        });
+
+        /* Fade-in observer */
+        const observer = new IntersectionObserver(
+            (entries) => entries.forEach((e) => {
+                if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); }
+            }),
+            { threshold: 0.15 }
+        );
+        document.querySelectorAll(".fade-in").forEach((el) => observer.observe(el));
+
+        /* Init Gallery */
+        initGallery();
+    </script>
+</body>
+</html>

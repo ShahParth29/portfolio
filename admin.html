@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — Dhruvam Productions</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ── Navbar ──────────────────────────────────────────────────────────── -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.5s ease;" onmouseover="this.style.transform='rotate(90deg)'" onmouseout="this.style.transform='rotate(0deg)'">
+                    <circle cx="16" cy="16" r="13" />
+                    <circle cx="16" cy="16" r="5" fill="var(--accent)" fill-opacity="0.2" />
+                    <path d="M16 3L11 11" />
+                    <path d="M3 16L11 21" />
+                    <path d="M16 29L21 21" />
+                    <path d="M29 16L21 11" />
+                </svg>
+                <span>Dhruvam Productions</span>
+            </a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html" class="nav-cta">Hire Me</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ── Admin Page ─────────────────────────────────────────────────────── -->
+    <main class="admin-page">
+        <div class="container">
+
+            <!-- ── Login Section ──────────────────────────────────────────── -->
+            <div id="admin-login-section">
+                <div class="admin-login fade-in">
+                    <div style="font-size:3rem;margin-bottom:16px;">🔐</div>
+                    <h2>Admin Access</h2>
+                    <p>Sign in to manage your portfolio, blog, and enquiries.</p>
+
+                    <div id="login-alert" class="alert"></div>
+
+                    <form id="admin-login-form">
+                        <div class="form-group">
+                            <label for="login-username">Username</label>
+                            <input type="text" id="login-username" placeholder="admin" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%;">Sign In →</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ── Dashboard (hidden until login) ─────────────────────────── -->
+            <div id="admin-dashboard" class="admin-dashboard">
+                <div class="page-header" style="padding-bottom:24px;">
+                    <h1>Dashboard</h1>
+                    <p>Manage your videos, enquiries, and blog posts</p>
+                </div>
+
+                <!-- Tabs -->
+                <div class="admin-tabs-row" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom: 24px;">
+                    <div class="admin-tabs" style="margin-bottom:0;">
+                        <button class="admin-tab active" data-tab="videos" onclick="switchAdminTab('videos')">🎬 Videos</button>
+                        <button class="admin-tab" data-tab="enquiries" onclick="switchAdminTab('enquiries')">📩 Enquiries</button>
+                        <button class="admin-tab" data-tab="blog" onclick="switchAdminTab('blog')">📝 Blog</button>
+                        <button class="admin-tab" data-tab="pricing" onclick="switchAdminTab('pricing')">🏷️ Pricing</button>
+                        <button class="admin-tab" data-tab="settings" onclick="switchAdminTab('settings')">⚙️ Settings</button>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:16px;">
+                        <span id="session-warning" style="font-size:0.9rem; color:var(--text-muted); display:none;">Session expiring...</span>
+                        <button class="btn btn-secondary" onclick="handleLogout()" style="padding: 8px 16px;">Logout 🚪</button>
+                    </div>
+                </div>
+
+                <!-- ── Videos Panel ───────────────────────────────────────── -->
+                <div class="admin-panel active" id="panel-videos">
+                    <div class="admin-section-title">🎬 All Videos</div>
+
+                    <div class="admin-table-wrap">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Featured</th>
+                                    <th>Order</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-videos-tbody">
+                                <tr><td colspan="6" style="text-align:center;padding:32px;">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Add Video Form -->
+                    <div class="admin-form">
+                        <h3 id="video-form-title">+ Add New Video</h3>
+                        <div id="video-alert" class="alert"></div>
+                        <form id="video-form" onsubmit="handleAddVideo(event)">
+                            <input type="hidden" id="v-id">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="v-source-type">Video Source Type</label>
+                                    <select id="v-source-type" onchange="toggleVideoSourceInputs()">
+                                        <option value="youtube">YouTube Link</option>
+                                        <option value="upload">Upload Video File</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="v-title">Title</label>
+                                    <input type="text" id="v-title" placeholder="Video title" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group" id="v-youtube-group">
+                                    <label for="v-url">YouTube URL</label>
+                                    <input type="url" id="v-url" placeholder="https://youtube.com/watch?v=..." required>
+                                </div>
+                                <div class="form-group" id="v-upload-group" style="display:none;">
+                                    <label for="v-file">Upload Video File (.mp4/.mov)</label>
+                                    <input type="file" id="v-file" accept="video/mp4,video/quicktime">
+                                </div>
+                                <div class="form-group" id="v-thumbnail-group">
+                                    <label for="v-thumb-file">Upload Thumbnail Image (Optional)</label>
+                                    <input type="file" id="v-thumb-file" accept="image/*">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="v-category">Category</label>
+                                    <select id="v-category">
+                                        <option value="cinematic">Cinematic</option>
+                                        <option value="reels">Reels</option>
+                                        <option value="wedding">Wedding</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <div class="checkbox-group" style="padding-top:8px;">
+                                        <input type="checkbox" id="v-featured">
+                                        <label for="v-featured">Featured on homepage</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="v-description">Description</label>
+                                <textarea id="v-description" rows="2" placeholder="Brief description..."></textarea>
+                            </div>
+                            <div style="display:flex; gap:12px;">
+                                <button type="submit" class="btn btn-primary" id="v-submit-btn">Add Video</button>
+                                <button type="button" class="btn btn-secondary" id="v-cancel-btn" onclick="cancelVideoEdit()" style="display:none;">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ── Enquiries Panel ────────────────────────────────────── -->
+                <div class="admin-panel" id="panel-enquiries">
+                    <div class="admin-section-title">📩 Client Enquiries</div>
+
+                    <div class="admin-table-wrap">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Project</th>
+                                    <th>Budget</th>
+                                    <th>Date</th>
+                                    <th>Message</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-enquiries-tbody">
+                                <tr><td colspan="7" style="text-align:center;padding:32px;">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ── Blog Panel ─────────────────────────────────────────── -->
+                <div class="admin-panel" id="panel-blog">
+                    <div class="admin-section-title">📝 Blog Posts</div>
+
+                    <div class="admin-table-wrap">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-blog-tbody">
+                                <tr><td colspan="5" style="text-align:center;padding:32px;">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Add Blog Post Form -->
+                    <div class="admin-form">
+                        <h3>+ New Blog Post</h3>
+                        <div id="blog-alert" class="alert"></div>
+                        <form onsubmit="handleAddBlogPost(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="b-title">Title</label>
+                                    <input type="text" id="b-title" placeholder="Post title" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="b-slug">Slug</label>
+                                    <input type="text" id="b-slug" placeholder="post-url-slug" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="b-category">Category</label>
+                                    <select id="b-category">
+                                        <option value="tips">Tips</option>
+                                        <option value="behind-the-scenes">Behind the Scenes</option>
+                                        <option value="gear">Gear</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="b-cover">Cover Image URL</label>
+                                    <input type="url" id="b-cover" placeholder="https://...">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="b-content">Content (Markdown)</label>
+                                <textarea id="b-content" rows="10" placeholder="Write your post in markdown..." required></textarea>
+                            </div>
+                            <div class="checkbox-group" style="margin-bottom:20px;">
+                                <input type="checkbox" id="b-published">
+                                <label for="b-published">Publish immediately</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Create Post</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ── Pricing Panel ───────────────────────────────────────── -->
+                <div class="admin-panel" id="panel-pricing">
+                    <div class="admin-section-title">🏷️ Pricing Plans</div>
+
+                    <div class="admin-table-wrap">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Features</th>
+                                    <th>Popular</th>
+                                    <th>Active</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-pricing-tbody">
+                                <tr><td colspan="6" style="text-align:center;padding:32px;">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Add Pricing Form -->
+                    <div class="admin-form">
+                        <h3 id="pricing-form-title">+ Add New Pricing Plan</h3>
+                        <div id="pricing-alert" class="alert"></div>
+                        <form id="pricing-form" onsubmit="handleSavePricingPlan(event)">
+                            <input type="hidden" id="p-id">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="p-name">Plan Name</label>
+                                    <input type="text" id="p-name" placeholder="e.g. Editing Only" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="p-price">Discounted Price (₹)</label>
+                                    <input type="number" id="p-price" placeholder="2000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="p-original-price">Original Market Price (₹, optional)</label>
+                                    <input type="number" id="p-original-price" placeholder="3000">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="p-features">Features (comma-separated)</label>
+                                    <input type="text" id="p-features" placeholder="Feature 1, Feature 2, Feature 3" required>
+                                </div>
+                                <div class="form-group" style="display:flex; gap:20px; align-items:center; padding-top:24px;">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="p-popular">
+                                        <label for="p-popular">Popular</label>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="p-active" checked>
+                                        <label for="p-active">Active</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display:flex; gap:12px;">
+                                <button type="submit" class="btn btn-primary" id="p-submit-btn">Add Plan</button>
+                                <button type="button" class="btn btn-secondary" id="p-cancel-btn" onclick="cancelPricingEdit()" style="display:none;">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ── Settings Panel ──────────────────────────────────────── -->
+                <div class="admin-panel" id="panel-settings">
+                    <div class="admin-section-title">⚙️ Site Settings</div>
+
+                    <div class="admin-form">
+                        <div id="settings-alert" class="alert"></div>
+                        <form onsubmit="handleSaveSettings(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="s-name">Site Name</label>
+                                    <input type="text" id="s-name" placeholder="Dhruvam Productions" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="s-tagline">Tagline</label>
+                                    <input type="text" id="s-tagline" placeholder="We turn raw moments into cinematic masterpieces" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="s-email">Contact Email</label>
+                                    <input type="email" id="s-email" placeholder="contact@dhruvamproductions.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="s-phone">Contact Phone</label>
+                                    <input type="text" id="s-phone" placeholder="+91 81410 50770" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="s-location">Location</label>
+                                    <input type="text" id="s-location" placeholder="Ahmedabad, Gujarat, India" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="s-instagram">Instagram Link</label>
+                                    <input type="text" id="s-instagram" placeholder="https://instagram.com/dhruvamproductions">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="s-youtube">YouTube Link</label>
+                                    <input type="text" id="s-youtube" placeholder="https://youtube.com/dhruvamproductions">
+                                </div>
+                                <div class="form-group">
+                                    <label for="s-twitter">Twitter/X Link</label>
+                                    <input type="text" id="s-twitter" placeholder="https://x.com/dhruvamproductions">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="s-about-text">Footer About Text</label>
+                                <textarea id="s-about-text" rows="2" placeholder="Brief tagline about you..." required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="s-about-bio">Detailed Biography (About Page)</label>
+                                <textarea id="s-about-bio" rows="5" placeholder="Full biography..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Settings</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+    <footer class="footer" style="margin-top: 60px;">
+        <div class="container">
+            <div class="footer-bottom">
+                &copy; 2026 Dhruvam Productions. Admin Panel.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ── Scripts ─────────────────────────────────────────────────────────── -->
+    <script src="js/api.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        /* Nav toggle */
+        const navToggle = document.getElementById("nav-toggle");
+        const navLinks = document.getElementById("nav-links");
+        navToggle.addEventListener("click", () => {
+            navToggle.classList.toggle("active");
+            navLinks.classList.toggle("open");
+        });
+
+        /* Video source type toggle */
+        function toggleVideoSourceInputs() {
+            const type = document.getElementById("v-source-type").value;
+            const ytGroup = document.getElementById("v-youtube-group");
+            const uploadGroup = document.getElementById("v-upload-group");
+            const ytInput = document.getElementById("v-url");
+            const fileInput = document.getElementById("v-file");
+            const isEdit = !!document.getElementById("v-id").value;
+
+            if (type === "youtube") {
+                ytGroup.style.display = "block";
+                uploadGroup.style.display = "none";
+                ytInput.required = !isEdit;
+                fileInput.required = false;
+            } else {
+                ytGroup.style.display = "none";
+                uploadGroup.style.display = "block";
+                ytInput.required = false;
+                fileInput.required = !isEdit;
+            }
+        }
+
+        /* Fade-in */
+        const observer = new IntersectionObserver(
+            (entries) => entries.forEach((e) => {
+                if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); }
+            }),
+            { threshold: 0.15 }
+        );
+        document.querySelectorAll(".fade-in").forEach((el) => observer.observe(el));
+    </script>
+</body>
+</html>
