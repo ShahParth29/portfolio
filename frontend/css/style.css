@@ -229,7 +229,7 @@ img {
 }
 
 .nav-logo-img {
-    height: 52px; /* Increased for better legibility of custom logo */
+    height: 44px; /* Balanced for brand logo next to text */
     width: auto;
     object-fit: contain;
     display: block;

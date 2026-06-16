@@ -84,21 +84,26 @@ def seed_data():
             site_name_setting = db.query(SiteSettings).filter(SiteSettings.key == "site_name").first()
             if site_name_setting and site_name_setting.value == "NextFrame Studios":
                 site_name_setting.value = "Dhruvam Productions"
-                
-                tagline_setting = db.query(SiteSettings).filter(SiteSettings.key == "tagline").first()
-                if tagline_setting and tagline_setting.value in ["I turn moments into memories", "We turn raw moments into cinematic masterpieces"]:
-                    tagline_setting.value = "Professional video editor crafting cinematic stories that captivate audiences and leave lasting impressions."
-                    
-                about_text_setting = db.query(SiteSettings).filter(SiteSettings.key == "about_text").first()
-                if about_text_setting and ("NextFrame Studios" in about_text_setting.value or "Professional video editor" in about_text_setting.value):
-                    about_text_setting.value = "Premium production house specializing in cinematic films, corporate videos, wedding documentaries, and creative reels."
-                    
-                about_bio_setting = db.query(SiteSettings).filter(SiteSettings.key == "about_bio").first()
-                if about_bio_setting and ("NextFrame Studios" in about_bio_setting.value or "I am a passionate video editor" in about_bio_setting.value):
-                    about_bio_setting.value = "Dhruvam Productions is a premier video production house with a passion for cinematic visual storytelling. We specialize in directing, shooting, and editing cinema-grade videos, including wedding films, commercial ads, corporate documentaries, and creative reels. Our work blends modern pacing, premium color grading, and custom sound design to craft memories that last forever."
-                
                 db.commit()
-                print("[MIGRATION] Site settings upgraded from NextFrame Studios to Dhruvam Productions.")
+                print("[MIGRATION] Site settings upgraded name to Dhruvam Productions.")
+                
+            tagline_setting = db.query(SiteSettings).filter(SiteSettings.key == "tagline").first()
+            if tagline_setting and tagline_setting.value in ["I turn moments into memories", "We turn raw moments into cinematic masterpieces"]:
+                tagline_setting.value = "Professional video editor crafting cinematic stories that captivate audiences and leave lasting impressions."
+                db.commit()
+                print("[MIGRATION] Site settings upgraded tagline.")
+                
+            about_text_setting = db.query(SiteSettings).filter(SiteSettings.key == "about_text").first()
+            if about_text_setting and ("NextFrame Studios" in about_text_setting.value or "Professional video editor" in about_text_setting.value):
+                about_text_setting.value = "Premium production house specializing in cinematic films, corporate videos, wedding documentaries, and creative reels."
+                db.commit()
+                print("[MIGRATION] Site settings upgraded about_text.")
+                
+            about_bio_setting = db.query(SiteSettings).filter(SiteSettings.key == "about_bio").first()
+            if about_bio_setting and ("NextFrame Studios" in about_bio_setting.value or "I am a passionate video editor" in about_bio_setting.value):
+                about_bio_setting.value = "Dhruvam Productions is a premier video production house with a passion for cinematic visual storytelling. We specialize in directing, shooting, and editing cinema-grade videos, including wedding films, commercial ads, corporate documentaries, and creative reels. Our work blends modern pacing, premium color grading, and custom sound design to craft memories that last forever."
+                db.commit()
+                print("[MIGRATION] Site settings upgraded about_bio.")
 
             # Migrate blog post contents
             blog_posts = db.query(BlogPost).all()
