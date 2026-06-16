@@ -1,5 +1,7 @@
 import os
+import time
 from typing import List, Optional, Dict
+import cloudinary.utils
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status, UploadFile, File
 from sqlalchemy.orm import Session
@@ -105,3 +107,35 @@ def delete_video(
     db.delete(video)
     db.commit()
     return {"message": "Video deleted"}
+
+
+@router.get("/signature", response_model=Dict[str, str])
+def get_cloudinary_signature(
+    admin: dict = Depends(get_current_admin),
+):
+    """Generate signature for direct frontend upload to Cloudinary."""
+    if settings.STORAGE_BACKEND != "cloudinary" or not settings.CLOUDINARY_API_SECRET:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cloudinary storage is not configured",
+        )
+    
+    timestamp = int(time.time())
+    folder = "portfolio/uploads"
+    params = {
+        "timestamp": timestamp,
+        "folder": folder
+    }
+    
+    signature = cloudinary.utils.api_sign_request(
+        params,
+        settings.CLOUDINARY_API_SECRET
+    )
+    
+    return {
+        "signature": signature,
+        "timestamp": str(timestamp),
+        "folder": folder,
+        "api_key": settings.CLOUDINARY_API_KEY,
+        "cloud_name": settings.CLOUDINARY_CLOUD_NAME
+    }

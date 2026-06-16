@@ -408,10 +408,41 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function uploadFile(file) {
+    try {
+        // Try direct Cloudinary upload first
+        const sigRes = await fetch(`${BASE_URL}/api/videos/signature`, {
+            headers: authHeaders()
+        });
+        if (sigRes.ok) {
+            const sigData = await sigRes.json();
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("api_key", sigData.api_key);
+            formData.append("timestamp", sigData.timestamp);
+            formData.append("signature", sigData.signature);
+            formData.append("folder", sigData.folder);
+            
+            const url = `https://api.cloudinary.com/v1_1/${sigData.cloud_name}/auto/upload`;
+            const res = await fetch(url, {
+                method: "POST",
+                body: formData
+            });
+            if (res.ok) {
+                const data = await res.json();
+                return { url: data.secure_url };
+            } else {
+                const err = await res.json();
+                throw new Error(err.error?.message || "Cloudinary upload failed");
+            }
+        }
+    } catch (e) {
+        console.warn("Direct Cloudinary upload failed or not supported, falling back to local backend upload:", e.message);
+    }
+
+    // Fallback: upload directly to Render backend (used for local offline dev)
     const formData = new FormData();
     formData.append("file", file);
 
-    // Upload directly to Render backend (bypasses Vercel's 4.5MB body limit)
     const res = await fetch(`${BACKEND_URL}/api/videos/upload`, {
         method: "POST",
         headers: {
