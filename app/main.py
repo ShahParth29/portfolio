@@ -53,7 +53,24 @@ app.include_router(settings.router)
 
 @app.get("/api/health")
 def health_check():
-    return {"status": "ok", "service": "Dhruvam Productions API"}
+    import os
+    env_keys = list(os.environ.keys())
+    db_url_masked = "none"
+    if settings_cfg.DATABASE_URL:
+        db_url_masked = settings_cfg.DATABASE_URL.split("@")[-1] if "@" in settings_cfg.DATABASE_URL else settings_cfg.DATABASE_URL
+    return {
+        "status": "ok",
+        "service": "Dhruvam Productions API",
+        "debug": {
+            "env_keys": [k for k in env_keys if "SECRET" not in k and "PASS" not in k and "KEY" not in k],
+            "has_admin_user": settings_cfg.ADMIN_USERNAME is not None,
+            "admin_user": settings_cfg.ADMIN_USERNAME,
+            "has_admin_pass": settings_cfg.ADMIN_PASSWORD is not None,
+            "admin_pass_len": len(settings_cfg.ADMIN_PASSWORD) if settings_cfg.ADMIN_PASSWORD else 0,
+            "db_url_masked": db_url_masked,
+            "storage_backend": settings_cfg.STORAGE_BACKEND,
+        }
+    }
 
 
 # ── Seed Data ──────────────────────────────────────────────────────────────────
