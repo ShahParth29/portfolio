@@ -14,8 +14,8 @@ settings_cfg = get_settings()
 
 # ── App ────────────────────────────────────────────────────────────────────────
 app = FastAPI(
-    title="NextFrame Studios — Portfolio API",
-    description="Backend API for NextFrame Studios video production portfolio",
+    title="Dhruvam Productions — Portfolio API",
+    description="Backend API for Dhruvam Productions video production portfolio",
     version="1.0.0",
     docs_url=None,
     redoc_url=None,
@@ -53,7 +53,7 @@ app.include_router(settings.router)
 
 @app.get("/api/health")
 def health_check():
-    return {"status": "ok", "service": "NextFrame Studios API"}
+    return {"status": "ok", "service": "Dhruvam Productions API"}
 
 
 # ── Seed Data ──────────────────────────────────────────────────────────────────
@@ -64,21 +64,55 @@ def seed_data():
         # Seed Settings if empty
         if db.query(SiteSettings).count() == 0:
             default_settings = {
-                "site_name": "NextFrame Studios",
-                "tagline": "I turn moments into memories",
+                "site_name": "Dhruvam Productions",
+                "tagline": "We turn raw moments into cinematic masterpieces",
                 "email": "shahparth29980@gmail.com",
                 "phone": "+91 81410 50770",
                 "location": "Ahmedabad, Gujarat, India",
                 "youtube": "#",
                 "instagram": "#",
                 "twitter": "#",
-                "about_text": "Professional video editor specializing in cinematic films, reels, and wedding videos. Turning your raw footage into visual stories.",
-                "about_bio": "I am a passionate video editor with over 3 years of experience in creating stunning visuals. I specialize in color grading, sound design, and motion graphics to deliver cinema-grade videos.",
+                "about_text": "Premium production house specializing in cinematic films, corporate videos, wedding documentaries, and creative reels.",
+                "about_bio": "Dhruvam Productions is a premier video production house with a passion for cinematic visual storytelling. We specialize in directing, shooting, and editing cinema-grade videos, including wedding films, commercial ads, corporate documentaries, and creative reels. Our work blends modern pacing, premium color grading, and custom sound design to craft memories that last forever.",
             }
             for k, v in default_settings.items():
                 db.add(SiteSettings(key=k, value=v))
             db.commit()
             print("[SEED] Site settings seeded.")
+        else:
+            # Migration/Upgrade check for existing databases
+            site_name_setting = db.query(SiteSettings).filter(SiteSettings.key == "site_name").first()
+            if site_name_setting and site_name_setting.value == "NextFrame Studios":
+                site_name_setting.value = "Dhruvam Productions"
+                
+                tagline_setting = db.query(SiteSettings).filter(SiteSettings.key == "tagline").first()
+                if tagline_setting and tagline_setting.value == "I turn moments into memories":
+                    tagline_setting.value = "We turn raw moments into cinematic masterpieces"
+                    
+                about_text_setting = db.query(SiteSettings).filter(SiteSettings.key == "about_text").first()
+                if about_text_setting and ("NextFrame Studios" in about_text_setting.value or "Professional video editor" in about_text_setting.value):
+                    about_text_setting.value = "Premium production house specializing in cinematic films, corporate videos, wedding documentaries, and creative reels."
+                    
+                about_bio_setting = db.query(SiteSettings).filter(SiteSettings.key == "about_bio").first()
+                if about_bio_setting and ("NextFrame Studios" in about_bio_setting.value or "I am a passionate video editor" in about_bio_setting.value):
+                    about_bio_setting.value = "Dhruvam Productions is a premier video production house with a passion for cinematic visual storytelling. We specialize in directing, shooting, and editing cinema-grade videos, including wedding films, commercial ads, corporate documentaries, and creative reels. Our work blends modern pacing, premium color grading, and custom sound design to craft memories that last forever."
+                
+                db.commit()
+                print("[MIGRATION] Site settings upgraded from NextFrame Studios to Dhruvam Productions.")
+
+            # Migrate blog post contents
+            blog_posts = db.query(BlogPost).all()
+            for post in blog_posts:
+                updated = False
+                if "NextFrame Studios" in post.content:
+                    post.content = post.content.replace("NextFrame Studios", "Dhruvam Productions")
+                    updated = True
+                if "Aurevia Films" in post.content:
+                    post.content = post.content.replace("Aurevia Films", "Dhruvam Productions")
+                    updated = True
+                if updated:
+                    db.add(post)
+            db.commit()
 
         # Only seed if the videos table is empty
         if db.query(Video).count() > 0:
@@ -88,8 +122,9 @@ def seed_data():
         # (Seed video section removed to keep site clean)
 
         # ── Sample Pricing Plans ───────────────────────────────────────────
-        db.add_all([
-            PricingPlan(
+        if db.query(PricingPlan).count() == 0:
+            db.add_all([
+                PricingPlan(
                 name="Editing (Up to 3 min)",
                 price=2000,
                 original_price=3000,
@@ -120,8 +155,9 @@ def seed_data():
         ])
 
         # ── Sample Blog Post ──────────────────────────────────────────────
-        db.add(BlogPost(
-            title="5 Color Grading Tips for Cinematic Videos",
+        if db.query(BlogPost).filter(BlogPost.slug == "5-color-grading-tips").count() == 0:
+            db.add(BlogPost(
+                title="5 Color Grading Tips for Cinematic Videos",
             slug="5-color-grading-tips",
             content="""## Introduction
 
@@ -149,12 +185,12 @@ Consistency across shots is more important than any single grade. Use DaVinci Re
 
 ---
 
-*Happy grading! — NextFrame Studios*
+*Happy grading! — Dhruvam Productions*
 """,
             cover_image_url="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800",
             category="tips",
             is_published=True,
-        ))
+            ))
 
         db.commit()
         print("[SEED] Sample data inserted successfully.")
