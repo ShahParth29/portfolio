@@ -199,6 +199,8 @@ img {
     align-items: center;
     justify-content: space-between;
     height: 100%;
+    max-width: 100%;
+    padding: 0 80px;
 }
 
 .nav-logo {
@@ -1588,6 +1590,9 @@ img {
 }
 
 @media (max-width: 768px) {
+    .navbar .container {
+        padding: 0 24px;
+    }
     .nav-links {
         display: none;
         position: fixed;
@@ -1646,6 +1651,9 @@ img {
 }
 
 @media (max-width: 480px) {
+    .navbar .container {
+        padding: 0 16px;
+    }
     .container {
         padding: 0 16px;
     }
