@@ -422,7 +422,14 @@ async function uploadFile(file) {
             formData.append("signature", sigData.signature);
             formData.append("folder", sigData.folder);
             
-            const url = `https://api.cloudinary.com/v1_1/${sigData.cloud_name}/auto/upload`;
+            const isVideo = file.type.startsWith("video/") || 
+                            file.name.toLowerCase().endsWith(".mp4") || 
+                            file.name.toLowerCase().endsWith(".mov") || 
+                            file.name.toLowerCase().endsWith(".avi") || 
+                            file.name.toLowerCase().endsWith(".mkv") || 
+                            file.name.toLowerCase().endsWith(".webm");
+            const resourceType = isVideo ? "video" : "image";
+            const url = `https://api.cloudinary.com/v1_1/${sigData.cloud_name}/${resourceType}/upload`;
             const res = await fetch(url, {
                 method: "POST",
                 body: formData
