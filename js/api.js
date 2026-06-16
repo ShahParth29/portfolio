@@ -319,7 +319,20 @@ async function applySiteSettings() {
         const res = await fetchSiteSettings();
         const settings = res.settings;
 
+        window.siteSettings = settings; // Cache settings globally
+
         if (settings.site_name) {
+            // Dynamically update document title if it contains the fallback name
+            if (document.title.includes("Dhruvam Productions")) {
+                document.title = document.title.replace(/Dhruvam Productions/g, settings.site_name);
+            }
+            
+            // Dynamically update description meta tag
+            const descriptionMeta = document.querySelector('meta[name="description"]');
+            if (descriptionMeta && descriptionMeta.content && descriptionMeta.content.includes("Dhruvam Productions")) {
+                descriptionMeta.content = descriptionMeta.content.replace(/Dhruvam Productions/g, settings.site_name);
+            }
+
             document.querySelectorAll(".setting-site_name").forEach(el => {
                 // Skip logo elements that use the image logo
                 if (el.tagName === "SPAN" && el.classList.contains("logo-accent")) {

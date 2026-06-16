@@ -120,7 +120,18 @@
                 const post = await fetchBlogPost(slug);
 
                 // Set page title
-                document.title = `${post.title} — Dhruvam Productions`;
+                let siteName = "Dhruvam Productions";
+                if (window.siteSettings && window.siteSettings.site_name) {
+                    siteName = window.siteSettings.site_name;
+                } else {
+                    try {
+                        const settingsRes = await fetchSiteSettings();
+                        if (settingsRes.settings && settingsRes.settings.site_name) {
+                            siteName = settingsRes.settings.site_name;
+                        }
+                    } catch (e) {}
+                }
+                document.title = `${post.title} — ${siteName}`;
 
                 // Fill in content
                 document.getElementById("post-title").textContent = post.title;

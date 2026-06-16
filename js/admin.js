@@ -582,8 +582,21 @@ async function handleSaveSettings(e) {
 
 /* ── Init ──────────────────────────────────────────────────────────────────── */
 
+async function updateAdminLogoTitle() {
+    try {
+        const res = await fetchSiteSettings();
+        const settings = res.settings;
+        if (settings.site_name) {
+            document.title = `Admin Dashboard — ${settings.site_name}`;
+            const logoSpan = document.querySelector(".nav-logo span");
+            if (logoSpan) logoSpan.textContent = settings.site_name;
+        }
+    } catch (e) {}
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     initAdminLogin();
+    updateAdminLogoTitle();
 
     // Auto-login session recovery on reload/refresh
     const savedToken = getAuthToken();
