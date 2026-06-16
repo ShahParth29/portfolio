@@ -65,7 +65,7 @@ def seed_data():
         if db.query(SiteSettings).count() == 0:
             default_settings = {
                 "site_name": "Dhruvam Productions",
-                "tagline": "We turn raw moments into cinematic masterpieces",
+                "tagline": "Professional video editor crafting cinematic stories that captivate audiences and leave lasting impressions.",
                 "email": "shahparth29980@gmail.com",
                 "phone": "+91 81410 50770",
                 "location": "Ahmedabad, Gujarat, India",
@@ -86,8 +86,8 @@ def seed_data():
                 site_name_setting.value = "Dhruvam Productions"
                 
                 tagline_setting = db.query(SiteSettings).filter(SiteSettings.key == "tagline").first()
-                if tagline_setting and tagline_setting.value == "I turn moments into memories":
-                    tagline_setting.value = "We turn raw moments into cinematic masterpieces"
+                if tagline_setting and tagline_setting.value in ["I turn moments into memories", "We turn raw moments into cinematic masterpieces"]:
+                    tagline_setting.value = "Professional video editor crafting cinematic stories that captivate audiences and leave lasting impressions."
                     
                 about_text_setting = db.query(SiteSettings).filter(SiteSettings.key == "about_text").first()
                 if about_text_setting and ("NextFrame Studios" in about_text_setting.value or "Professional video editor" in about_text_setting.value):
