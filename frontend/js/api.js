@@ -5,8 +5,8 @@
 // When running on Vercel (production), route JSON requests through Vercel's proxy
 // to avoid CORS and adblocker issues. File uploads still bypass Vercel due to body limits.
 const IS_LOCAL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-const BACKEND_URL = "https://parth-edits-api.onrender.com";
 const BASE_URL = window.location.origin;
+const BACKEND_URL = BASE_URL; // Render is removed; everything is hosted on Vercel
 
 /**
  * Resolve relative /uploads/ paths to the Render backend URL.
@@ -459,11 +459,12 @@ async function uploadFile(file) {
         console.warn("Direct Cloudinary upload failed or not supported, falling back to local backend upload:", e.message);
     }
 
-    // Fallback: upload directly to Render backend (used for local offline dev)
+    // Fallback: upload directly to local/Render backend
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch(`${BACKEND_URL}/api/videos/upload`, {
+    const uploadBaseUrl = IS_LOCAL ? BASE_URL : BACKEND_URL;
+    const res = await fetch(`${uploadBaseUrl}/api/videos/upload`, {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${getAuthToken()}`
