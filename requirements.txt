@@ -10,3 +10,4 @@ aiosmtplib
 jinja2
 cloudinary
 psycopg2-binary
+boto3

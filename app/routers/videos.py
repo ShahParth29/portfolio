@@ -139,3 +139,111 @@ def get_cloudinary_signature(
         "api_key": settings.CLOUDINARY_API_KEY,
         "cloud_name": settings.CLOUDINARY_CLOUD_NAME
     }
+
+
+@router.get("/upload-params", response_model=Dict[str, str])
+def get_upload_params(
+    filename: Optional[str] = Query(None),
+    filetype: Optional[str] = Query(None),
+    admin: dict = Depends(get_current_admin),
+):
+    """Get parameters and credentials/signatures for uploading files to the active backend."""
+    backend = settings.STORAGE_BACKEND
+    
+    if backend == "cloudinary":
+        if not settings.CLOUDINARY_API_SECRET:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Cloudinary storage is not configured",
+            )
+        timestamp = int(time.time())
+        folder = "portfolio/uploads"
+        params = {
+            "timestamp": timestamp,
+            "folder": folder
+        }
+        signature = cloudinary.utils.api_sign_request(
+            params,
+            settings.CLOUDINARY_API_SECRET
+        )
+        return {
+            "backend": "cloudinary",
+            "signature": signature,
+            "timestamp": str(timestamp),
+            "folder": folder,
+            "api_key": settings.CLOUDINARY_API_KEY,
+            "cloud_name": settings.CLOUDINARY_CLOUD_NAME
+        }
+        
+    elif backend == "s3":
+        if not all([settings.S3_ACCESS_KEY_ID, settings.S3_SECRET_ACCESS_KEY, settings.S3_BUCKET_NAME]):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="S3 storage is not configured",
+            )
+        if not filename:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="filename query parameter is required for S3 upload",
+            )
+            
+        import boto3
+        from botocore.config import Config
+        
+        s3_client = boto3.client(
+            "s3",
+            aws_access_key_id=settings.S3_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.S3_SECRET_ACCESS_KEY,
+            endpoint_url=settings.S3_ENDPOINT_URL or None,
+            region_name=settings.S3_REGION_NAME or None,
+            config=Config(signature_version="s3v4")
+        )
+        
+        from app.core.storage import _detect_file_type
+        is_video, is_image = _detect_file_type(filename)
+        
+        sub_dir = "videos" if is_video else "thumbnails"
+        key = f"portfolio/uploads/{sub_dir}/{int(time.time())}_{os.path.basename(filename)}"
+        
+        if not filetype:
+            import mimetypes
+            filetype, _ = mimetypes.guess_type(filename)
+            if not filetype:
+                filetype = "video/mp4" if is_video else "image/png"
+                
+        try:
+            presigned_url = s3_client.generate_presigned_url(
+                ClientMethod="put_object",
+                Params={
+                    "Bucket": settings.S3_BUCKET_NAME,
+                    "Key": key,
+                    "ContentType": filetype,
+                },
+                ExpiresIn=3600,
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Failed to generate presigned S3 URL: {e}"
+            )
+            
+        if settings.S3_PUBLIC_URL:
+            public_url = f"{settings.S3_PUBLIC_URL.rstrip('/')}/{key}"
+        else:
+            region = settings.S3_REGION_NAME or "us-east-1"
+            if settings.S3_ENDPOINT_URL:
+                public_url = f"{settings.S3_ENDPOINT_URL.rstrip('/')}/{settings.S3_BUCKET_NAME}/{key}"
+            else:
+                public_url = f"https://{settings.S3_BUCKET_NAME}.s3.{region}.amazonaws.com/{key}"
+                
+        return {
+            "backend": "s3",
+            "presigned_url": presigned_url,
+            "public_url": public_url,
+        }
+        
+    else:
+        return {
+            "backend": "local"
+        }
+

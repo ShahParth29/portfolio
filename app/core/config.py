@@ -17,13 +17,21 @@ class Settings(BaseSettings):
     EMAIL_TO: str = "shahparth29980@gmail.com"
     UPLOAD_DIR: str = "frontend/uploads"
 
-    # Storage backend: "local" or "cloudinary"
+    # Storage backend: "local", "cloudinary", or "s3"
     STORAGE_BACKEND: str = "local"
 
     # Cloudinary (required when STORAGE_BACKEND=cloudinary)
     CLOUDINARY_CLOUD_NAME: str = ""
     CLOUDINARY_API_KEY: str = ""
     CLOUDINARY_API_SECRET: str = ""
+
+    # S3 / Cloudflare R2 / Backblaze B2 (required when STORAGE_BACKEND=s3)
+    S3_ACCESS_KEY_ID: str = ""
+    S3_SECRET_ACCESS_KEY: str = ""
+    S3_BUCKET_NAME: str = ""
+    S3_ENDPOINT_URL: str = ""
+    S3_REGION_NAME: str = ""
+    S3_PUBLIC_URL: str = ""
 
     # Security
     CORS_ORIGINS: str = "*"  # Comma-separated origins for production

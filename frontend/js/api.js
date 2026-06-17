@@ -323,14 +323,22 @@ async function applySiteSettings() {
 
         if (settings.site_name) {
             // Dynamically update document title if it contains the fallback name
+            if (document.title.includes("NPJ Productions")) {
+                document.title = document.title.replace(/NPJ Productions/g, settings.site_name);
+            }
             if (document.title.includes("Dhruvam Productions")) {
                 document.title = document.title.replace(/Dhruvam Productions/g, settings.site_name);
             }
             
             // Dynamically update description meta tag
             const descriptionMeta = document.querySelector('meta[name="description"]');
-            if (descriptionMeta && descriptionMeta.content && descriptionMeta.content.includes("Dhruvam Productions")) {
-                descriptionMeta.content = descriptionMeta.content.replace(/Dhruvam Productions/g, settings.site_name);
+            if (descriptionMeta && descriptionMeta.content) {
+                if (descriptionMeta.content.includes("NPJ Productions")) {
+                    descriptionMeta.content = descriptionMeta.content.replace(/NPJ Productions/g, settings.site_name);
+                }
+                if (descriptionMeta.content.includes("Dhruvam Productions")) {
+                    descriptionMeta.content = descriptionMeta.content.replace(/Dhruvam Productions/g, settings.site_name);
+                }
             }
 
             document.querySelectorAll(".setting-site_name").forEach(el => {
@@ -421,102 +429,124 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function uploadFile(file) {
-    let isCloudinary = false;
+    let activeBackend = "local";
     try {
-        // Try direct Cloudinary upload first
-        const sigRes = await fetch(`${BASE_URL}/api/videos/signature`, {
+        const paramsRes = await fetch(`${BASE_URL}/api/videos/upload-params?filename=${encodeURIComponent(file.name)}&filetype=${encodeURIComponent(file.type)}`, {
             headers: authHeaders()
         });
-        if (sigRes.ok) {
-            isCloudinary = true;
-            const sigData = await sigRes.json();
+        if (paramsRes.ok) {
+            const uploadData = await paramsRes.json();
+            activeBackend = uploadData.backend || "local";
             
-            const isVideo = file.type.startsWith("video/") || 
-                            file.name.toLowerCase().endsWith(".mp4") || 
-                            file.name.toLowerCase().endsWith(".mov") || 
-                            file.name.toLowerCase().endsWith(".avi") || 
-                            file.name.toLowerCase().endsWith(".mkv") || 
-                            file.name.toLowerCase().endsWith(".webm");
-            const resourceType = isVideo ? "video" : "image";
-            const url = `https://api.cloudinary.com/v1_1/${sigData.cloud_name}/${resourceType}/upload`;
-            
-            const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
-            if (file.size <= CHUNK_SIZE) {
-                // Standard direct upload for small files
-                const formData = new FormData();
-                formData.append("file", file);
-                formData.append("api_key", sigData.api_key);
-                formData.append("timestamp", sigData.timestamp);
-                formData.append("signature", sigData.signature);
-                formData.append("folder", sigData.folder);
-                
-                const res = await fetch(url, {
-                    method: "POST",
-                    body: formData
+            if (activeBackend === "s3") {
+                const putRes = await fetch(uploadData.presigned_url, {
+                    method: "PUT",
+                    body: file,
+                    headers: {
+                        "Content-Type": file.type
+                    }
                 });
-                if (res.ok) {
-                    const data = await res.json();
-                    return { url: data.secure_url };
+                if (putRes.ok) {
+                    return { url: uploadData.public_url };
                 } else {
-                    let errMsg = "Cloudinary upload failed";
+                    let errMsg = `S3 direct upload failed with status ${putRes.status}`;
                     try {
-                        const err = await res.json();
-                        errMsg = err.error?.message || errMsg;
+                        const text = await putRes.text();
+                        if (text && text.includes("<Message>")) {
+                            const match = text.match(/<Message>([^<]+)<\/Message>/);
+                            if (match) errMsg += `: ${match[1]}`;
+                        }
                     } catch (_) {}
                     throw new Error(errMsg);
                 }
-            } else {
-                // Signed chunked upload for large files (like videos)
-                const uploadId = "upload_" + Math.random().toString(36).substring(2, 15) + "_" + Date.now();
-                let start = 0;
-                let lastResponseData = null;
+            } else if (activeBackend === "cloudinary") {
+                const isVideo = file.type.startsWith("video/") || 
+                                file.name.toLowerCase().endsWith(".mp4") || 
+                                file.name.toLowerCase().endsWith(".mov") || 
+                                file.name.toLowerCase().endsWith(".avi") || 
+                                file.name.toLowerCase().endsWith(".mkv") || 
+                                file.name.toLowerCase().endsWith(".webm");
+                const resourceType = isVideo ? "video" : "image";
+                const url = `https://api.cloudinary.com/v1_1/${uploadData.cloud_name}/${resourceType}/upload`;
                 
-                while (start < file.size) {
-                    const end = Math.min(start + CHUNK_SIZE, file.size);
-                    const chunk = file.slice(start, end);
-                    
+                const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
+                if (file.size <= CHUNK_SIZE) {
+                    // Standard direct upload for small files
                     const formData = new FormData();
-                    formData.append("file", chunk);
-                    formData.append("api_key", sigData.api_key);
-                    formData.append("timestamp", sigData.timestamp);
-                    formData.append("signature", sigData.signature);
-                    formData.append("folder", sigData.folder);
+                    formData.append("file", file);
+                    formData.append("api_key", uploadData.api_key);
+                    formData.append("timestamp", uploadData.timestamp);
+                    formData.append("signature", uploadData.signature);
+                    formData.append("folder", uploadData.folder);
                     
                     const res = await fetch(url, {
                         method: "POST",
-                        headers: {
-                            "X-Unique-Upload-Id": uploadId,
-                            "Content-Range": `bytes ${start}-${end - 1}/${file.size}`
-                        },
                         body: formData
                     });
-                    
-                    if (!res.ok) {
-                        let errMsg = "Cloudinary chunked upload failed";
+                    if (res.ok) {
+                        const data = await res.json();
+                        return { url: data.secure_url };
+                    } else {
+                        let errMsg = "Cloudinary upload failed";
                         try {
                             const err = await res.json();
                             errMsg = err.error?.message || errMsg;
                         } catch (_) {}
                         throw new Error(errMsg);
                     }
-                    
-                    lastResponseData = await res.json();
-                    start = end;
-                }
-                
-                if (lastResponseData && lastResponseData.secure_url) {
-                    return { url: lastResponseData.secure_url };
                 } else {
-                    throw new Error("Failed to retrieve uploaded file URL from Cloudinary");
+                    // Signed chunked upload for large files (like videos)
+                    const uploadId = "upload_" + Math.random().toString(36).substring(2, 15) + "_" + Date.now();
+                    let start = 0;
+                    let lastResponseData = null;
+                    
+                    while (start < file.size) {
+                        const end = Math.min(start + CHUNK_SIZE, file.size);
+                        const chunk = file.slice(start, end);
+                        
+                        const formData = new FormData();
+                        formData.append("file", chunk);
+                        formData.append("api_key", uploadData.api_key);
+                        formData.append("timestamp", uploadData.timestamp);
+                        formData.append("signature", uploadData.signature);
+                        formData.append("folder", uploadData.folder);
+                        
+                        const res = await fetch(url, {
+                            method: "POST",
+                            headers: {
+                                "X-Unique-Upload-Id": uploadId,
+                                "Content-Range": `bytes ${start}-${end - 1}/${file.size}`
+                            },
+                            body: formData
+                        });
+                        
+                        if (!res.ok) {
+                            let errMsg = "Cloudinary chunked upload failed";
+                            try {
+                                const err = await res.json();
+                                errMsg = err.error?.message || errMsg;
+                            } catch (_) {}
+                            throw new Error(errMsg);
+                        }
+                        
+                        lastResponseData = await res.json();
+                        start = end;
+                    }
+                    
+                    if (lastResponseData && lastResponseData.secure_url) {
+                        return { url: lastResponseData.secure_url };
+                    } else {
+                        throw new Error("Failed to retrieve uploaded file URL from Cloudinary");
+                    }
                 }
             }
         }
     } catch (e) {
-        if (isCloudinary) {
-            console.error("Cloudinary upload failed:", e);
+        if (activeBackend === "cloudinary" || activeBackend === "s3") {
+            console.error(`${activeBackend} upload failed:`, e);
             throw e;
         }
-        console.warn("Direct Cloudinary upload signature fetch failed, falling back to local backend upload:", e.message);
+        console.warn("Direct upload params fetch or upload failed, falling back to local backend upload:", e.message);
     }
 
     // Fallback: upload directly to local/Render backend
