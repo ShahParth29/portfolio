@@ -83,7 +83,7 @@ def seed_data():
             default_settings = {
                 "site_name": "NPJ Productions",
                 "tagline": "Professional production house crafting cinematic stories that captivate audiences and leave lasting impressions.",
-                "email": "shahparth29980@gmail.com",
+                "email": "npjproductions.in@gmail.com",
                 "phone": "+91 81410 50770",
                 "location": "Ahmedabad, Gujarat, India",
                 "youtube": "#",

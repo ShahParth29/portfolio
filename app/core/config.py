@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: str = ""
     SMTP_USE_TLS: bool = True
     EMAIL_FROM: str = ""
-    EMAIL_TO: str = "shahparth29980@gmail.com"
+    EMAIL_TO: str = "npjproductions.in@gmail.com"
     UPLOAD_DIR: str = "frontend/uploads"
 
     # Storage backend: "local", "cloudinary", or "s3"
