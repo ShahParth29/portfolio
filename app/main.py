@@ -87,8 +87,8 @@ def seed_data():
                 "phone": "+91 81410 50770",
                 "location": "Ahmedabad, Gujarat, India",
                 "youtube": "#",
-                "instagram": "#",
-                "twitter": "#",
+                "instagram": "https://instagram.com/npjproductions",
+                "twitter": "https://x.com/npjproductions",
                 "about_text": "Premium production house specializing in cinematic films, corporate videos, wedding documentaries, and creative reels.",
                 "about_bio": "NPJ Productions is a premier video production house with a passion for cinematic visual storytelling. We specialize in directing, shooting, and editing cinema-grade videos, including wedding films, commercial ads, corporate documentaries, and creative reels. Our work blends modern pacing, premium color grading, and custom sound design to craft memories that last forever.",
             }
