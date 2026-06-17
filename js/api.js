@@ -421,19 +421,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function uploadFile(file) {
+    let isCloudinary = false;
     try {
         // Try direct Cloudinary upload first
         const sigRes = await fetch(`${BASE_URL}/api/videos/signature`, {
             headers: authHeaders()
         });
         if (sigRes.ok) {
+            isCloudinary = true;
             const sigData = await sigRes.json();
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("api_key", sigData.api_key);
-            formData.append("timestamp", sigData.timestamp);
-            formData.append("signature", sigData.signature);
-            formData.append("folder", sigData.folder);
             
             const isVideo = file.type.startsWith("video/") || 
                             file.name.toLowerCase().endsWith(".mp4") || 
@@ -443,24 +439,84 @@ async function uploadFile(file) {
                             file.name.toLowerCase().endsWith(".webm");
             const resourceType = isVideo ? "video" : "image";
             const url = `https://api.cloudinary.com/v1_1/${sigData.cloud_name}/${resourceType}/upload`;
-            const res = await fetch(url, {
-                method: "POST",
-                body: formData
-            });
-            if (res.ok) {
-                const data = await res.json();
-                return { url: data.secure_url };
+            
+            const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
+            if (file.size <= CHUNK_SIZE) {
+                // Standard direct upload for small files
+                const formData = new FormData();
+                formData.append("file", file);
+                formData.append("api_key", sigData.api_key);
+                formData.append("timestamp", sigData.timestamp);
+                formData.append("signature", sigData.signature);
+                formData.append("folder", sigData.folder);
+                
+                const res = await fetch(url, {
+                    method: "POST",
+                    body: formData
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    return { url: data.secure_url };
+                } else {
+                    let errMsg = "Cloudinary upload failed";
+                    try {
+                        const err = await res.json();
+                        errMsg = err.error?.message || errMsg;
+                    } catch (_) {}
+                    throw new Error(errMsg);
+                }
             } else {
-                let errMsg = "Cloudinary upload failed";
-                try {
-                    const err = await res.json();
-                    errMsg = err.error?.message || errMsg;
-                } catch (_) {}
-                throw new Error(errMsg);
+                // Signed chunked upload for large files (like videos)
+                const uploadId = "upload_" + Math.random().toString(36).substring(2, 15) + "_" + Date.now();
+                let start = 0;
+                let lastResponseData = null;
+                
+                while (start < file.size) {
+                    const end = Math.min(start + CHUNK_SIZE, file.size);
+                    const chunk = file.slice(start, end);
+                    
+                    const formData = new FormData();
+                    formData.append("file", chunk);
+                    formData.append("api_key", sigData.api_key);
+                    formData.append("timestamp", sigData.timestamp);
+                    formData.append("signature", sigData.signature);
+                    formData.append("folder", sigData.folder);
+                    
+                    const res = await fetch(url, {
+                        method: "POST",
+                        headers: {
+                            "X-Unique-Upload-Id": uploadId,
+                            "Content-Range": `bytes ${start}-${end - 1}/${file.size}`
+                        },
+                        body: formData
+                    });
+                    
+                    if (!res.ok) {
+                        let errMsg = "Cloudinary chunked upload failed";
+                        try {
+                            const err = await res.json();
+                            errMsg = err.error?.message || errMsg;
+                        } catch (_) {}
+                        throw new Error(errMsg);
+                    }
+                    
+                    lastResponseData = await res.json();
+                    start = end;
+                }
+                
+                if (lastResponseData && lastResponseData.secure_url) {
+                    return { url: lastResponseData.secure_url };
+                } else {
+                    throw new Error("Failed to retrieve uploaded file URL from Cloudinary");
+                }
             }
         }
     } catch (e) {
-        console.warn("Direct Cloudinary upload failed or not supported, falling back to local backend upload:", e.message);
+        if (isCloudinary) {
+            console.error("Cloudinary upload failed:", e);
+            throw e;
+        }
+        console.warn("Direct Cloudinary upload signature fetch failed, falling back to local backend upload:", e.message);
     }
 
     // Fallback: upload directly to local/Render backend
