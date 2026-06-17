@@ -8,6 +8,28 @@
     <meta name="description"
         content="Hire NPJ Productions for your next video or film project. Submit your enquiry and get a custom quote for cinematic films, highlights, ads, and creative reels.">
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="img/favicon-512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://npjproductions.com/contact.html">
+    <meta property="og:title" content="Hire Us — NPJ Productions">
+    <meta property="og:description" content="Hire NPJ Productions for your next video or film project. Submit your enquiry and get a custom quote for cinematic films, highlights, ads, and creative reels.">
+    <meta property="og:image" content="https://npjproductions.com/img/favicon-512x512.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://npjproductions.com/contact.html">
+    <meta property="twitter:title" content="Hire Us — NPJ Productions">
+    <meta property="twitter:description" content="Hire NPJ Productions for your next video or film project. Submit your enquiry and get a custom quote for cinematic films, highlights, ads, and creative reels.">
+    <meta property="twitter:image" content="https://npjproductions.com/img/favicon-512x512.png">
 </head>
 
 <body>
@@ -19,10 +41,10 @@
     <nav class="navbar" id="navbar">
         <div class="container">
             <a href="index.html" class="nav-logo">
-                <img src="img/logo.png" alt="NPJ Productions" class="nav-logo-img">
+                <img src="img/logo.webp" alt="NPJ Productions Logo" class="nav-logo-img">
                 <span class="setting-site_name">NPJ Productions</span>
             </a>
-            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
                 <span></span><span></span><span></span>
             </button>
             <ul class="nav-links" id="nav-links">
@@ -84,6 +106,12 @@
                     <div id="contact-alert" class="alert"></div>
 
                     <form id="contact-form">
+                        <!-- Honeypot field for spam protection -->
+                        <div class="form-group-website" style="display:none !important; visibility:hidden !important;" aria-hidden="true">
+                            <label for="c-website">Leave this field blank if you are human</label>
+                            <input type="text" id="c-website" name="website" tabindex="-1" autocomplete="off" placeholder="Your website url">
+                        </div>
+
                         <div class="form-group">
                             <label for="c-name">Full Name *</label>
                             <input type="text" id="c-name" placeholder="Your full name" required>
@@ -238,6 +266,7 @@
                 budget_range: document.getElementById("c-budget").value,
                 event_date: document.getElementById("c-date").value,
                 message: document.getElementById("c-message").value.trim(),
+                website: document.getElementById("c-website").value.trim(),
             };
 
             try {
