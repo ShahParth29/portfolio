@@ -2,8 +2,9 @@ import os
 import shutil
 import re
 
-src_dir = r"c:\SBTP-2026-reverseBits\portfolio\frontend"
-dist_dir = r"c:\SBTP-2026-reverseBits\portfolio\dist"
+base_dir = os.path.dirname(os.path.abspath(__file__))
+src_dir = os.path.join(base_dir, "frontend")
+dist_dir = os.path.join(base_dir, "dist")
 
 def clean_and_copy():
     if os.path.exists(dist_dir):
