@@ -8,38 +8,38 @@
 
 /* ── CSS Custom Properties ─────────────────────────────────────────────────── */
 :root {
-    --bg-primary: #050507;
-    --bg-secondary: #0a0a0d;
-    --bg-card: rgba(18, 18, 22, 0.7);
-    --bg-card-hover: rgba(26, 26, 32, 0.85);
-    --bg-glass: rgba(10, 10, 13, 0.82);
-    --text-primary: #ffffff;
-    --text-secondary: #d1d1db;
-    --text-muted: #8e8e9c;
-    --accent: #e5b842;
-    --accent-hover: #f3cf70;
-    --accent-glow: rgba(229, 184, 66, 0.25);
-    --accent-subtle: rgba(229, 184, 66, 0.08);
-    --border: rgba(229, 184, 66, 0.12);
-    --border-light: rgba(229, 184, 66, 0.25);
+    --bg-primary: #0a0e17;
+    --bg-secondary: #0f172a;
+    --bg-card: rgba(30, 41, 59, 0.45);
+    --bg-card-hover: rgba(30, 41, 59, 0.65);
+    --bg-glass: rgba(15, 23, 42, 0.75);
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #64748b;
+    --accent: #6366f1;
+    --accent-hover: #818cf8;
+    --accent-glow: rgba(99, 102, 241, 0.25);
+    --accent-subtle: rgba(99, 102, 241, 0.08);
+    --border: rgba(99, 102, 241, 0.12);
+    --border-light: rgba(6, 182, 212, 0.24);
     --success: #10b981;
     --error: #ef4444;
     --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
-    --shadow-sm: 0 2px 8px rgba(0,0,0,0.5);
-    --shadow-md: 0 8px 32px rgba(0,0,0,0.6);
-    --shadow-lg: 0 16px 48px rgba(0,0,0,0.8);
-    --shadow-glow: 0 0 40px rgba(229, 184, 66, 0.15);
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+    --shadow-sm: 0 4px 12px rgba(0,0,0,0.3);
+    --shadow-md: 0 12px 40px rgba(0,0,0,0.45);
+    --shadow-lg: 0 20px 56px rgba(0,0,0,0.6);
+    --shadow-glow: 0 0 32px rgba(99, 102, 241, 0.12);
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: 0.15s ease;
     --max-width: 1200px;
-    --nav-height: 72px;
+    --nav-height: 88px;
 
-    /* Cinematic gradients and secondary accents */
-    --secondary-accent: #a87c11;
-    --secondary-accent-glow: rgba(168, 124, 17, 0.25);
+    /* Tech gradients and secondary accents */
+    --secondary-accent: #06b6d4;
+    --secondary-accent-glow: rgba(6, 182, 212, 0.25);
 }
 
 /* ── Reset & Base ──────────────────────────────────────────────────────────── */
@@ -177,21 +177,25 @@ img {
 /* ── Navbar ────────────────────────────────────────────────────────────────── */
 .navbar {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: var(--nav-height);
-    background: rgba(10, 10, 10, 0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 48px);
+    max-width: var(--max-width);
+    height: 64px;
+    background: var(--bg-glass);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--border);
+    border-radius: 9999px;
     z-index: 1000;
     transition: all var(--transition);
 }
 
 .navbar.scrolled {
-    background: rgba(10, 10, 10, 0.98);
-    box-shadow: var(--shadow-sm);
+    background: var(--bg-glass);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-light);
 }
 
 .navbar .container {
@@ -199,8 +203,8 @@ img {
     align-items: center;
     justify-content: space-between;
     height: 100%;
-    max-width: 100%;
-    padding: 0 80px;
+    width: 100%;
+    padding: 0 28px;
 }
 
 .nav-logo {
@@ -267,9 +271,10 @@ img {
 
 .nav-links a.nav-cta {
     background: var(--accent);
-    color: var(--bg-primary);
+    color: #ffffff;
     font-weight: 600;
     padding: 8px 20px;
+    border-radius: 9999px;
 }
 
 .nav-links a.nav-cta:hover {
@@ -440,7 +445,7 @@ img {
     font-family: 'Inter', sans-serif;
     font-size: 0.92rem;
     font-weight: 600;
-    border-radius: var(--radius-md);
+    border-radius: 9999px;
     border: none;
     cursor: pointer;
     transition: all var(--transition);
@@ -450,12 +455,12 @@ img {
 
 .btn-primary {
     background: var(--accent);
-    color: var(--bg-primary);
+    color: #ffffff;
 }
 
 .btn-primary:hover {
     background: var(--accent-hover);
-    color: var(--bg-primary);
+    color: #ffffff;
     transform: translateY(-2px);
     box-shadow: 0 8px 24px var(--accent-glow);
 }
