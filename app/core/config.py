@@ -11,8 +11,11 @@ class Settings(BaseSettings):
     ADMIN_USERNAME: str = "admin"
     ADMIN_PASSWORD: str = "INSECURE-DEV-PASSWORD-CHANGE-IN-PRODUCTION"
 
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
     SMTP_USER: str = ""
     SMTP_PASSWORD: str = ""
+    SMTP_USE_TLS: bool = True
     EMAIL_FROM: str = ""
     EMAIL_TO: str = "shahparth29980@gmail.com"
     UPLOAD_DIR: str = "frontend/uploads"

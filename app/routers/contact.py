@@ -21,7 +21,13 @@ login_attempts = {}
 
 @router.post("/", response_model=MessageResponse, status_code=status.HTTP_201_CREATED)
 def submit_enquiry(data: EnquiryCreate, db: Session = Depends(get_db)):
-    enquiry = ClientEnquiry(**data.model_dump())
+    # Honeypot spam check: if website is filled, discard the submit silently but return success
+    if data.website:
+        print(f"[SPAM DETECTED] Discarding spam submission from {data.email} with honeypot field filled.")
+        return {"message": "Your enquiry has been submitted! I'll get back to you soon."}
+
+    enquiry_data = data.model_dump(exclude={"website"})
+    enquiry = ClientEnquiry(**enquiry_data)
     db.add(enquiry)
     db.commit()
     db.refresh(enquiry)

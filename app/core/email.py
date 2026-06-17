@@ -24,10 +24,17 @@ def send_email_notification(
     msg.attach(MIMEText(body_html, "html"))
 
     try:
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
-            server.ehlo()
-            server.starttls()
-            server.ehlo()
+        # Use SMTP_SSL for port 465, else standard SMTP
+        if settings.SMTP_PORT == 465:
+            server_conn = smtplib.SMTP_SSL(settings.SMTP_HOST, settings.SMTP_PORT)
+        else:
+            server_conn = smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT)
+            
+        with server_conn as server:
+            if settings.SMTP_PORT != 465 and settings.SMTP_USE_TLS:
+                server.ehlo()
+                server.starttls()
+                server.ehlo()
             server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
             server.send_message(msg)
         print(f"[EMAIL] Sent: {subject}")

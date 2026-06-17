@@ -2206,4 +2206,14 @@ img {
     height: 20px;
 }
 
+/* ── Accessibility: Keyboard Focus Styles ─────────────────────────────────── */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--accent) !important;
+    outline-offset: 4px !important;
+}
+
 

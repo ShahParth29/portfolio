@@ -42,6 +42,7 @@ class EnquiryCreate(BaseModel):
     budget_range: str = ""
     event_date: str = ""
     message: str
+    website: Optional[str] = None  # Honeypot field for spam protection
 
 
 class EnquiryOut(BaseModel):

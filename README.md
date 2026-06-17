@@ -1,18 +1,18 @@
-# 🎬 NextFrame Studios — Portfolio & Booking Platform
+# 🎬 NPJ Productions — Portfolio & Booking Platform
 
-A full-stack portfolio website for a professional video editor, featuring a cinematic design, admin dashboard, blog, pricing, and client enquiry system.
+A production-ready full-stack portfolio website for NPJ Productions (a videography and video editing studio), featuring a cinematic design, automated asset minification/build step, client-side & server-side honeypot spam protection, customizable SMTP notifications, admin dashboard, blog, pricing, and a client enquiry system.
 
 ## 🛠 Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| **Frontend** | HTML, CSS, Vanilla JS |
+| **Frontend** | HTML, CSS, Vanilla JS (Minified via custom build step) |
 | **Backend** | Python, FastAPI, SQLAlchemy |
 | **Database** | SQLite (dev) |
 | **Auth** | JWT (HS256) with bcrypt password hashing |
-| **Storage** | Local filesystem or Cloudinary CDN |
-| **Email** | Gmail SMTP (optional) |
-| **Deployment** | Vercel (frontend) + Render (backend) |
+| **Storage** | Local filesystem, AWS S3, or Cloudinary CDN |
+| **Email** | SMTP / TLS (Gmail, Resend, SendGrid, etc.) |
+| **Deployment** | Vercel (monorepo frontend server + python API routes) |
 
 ---
 
@@ -58,12 +58,15 @@ All sensitive configuration is managed through environment variables. **Never co
 | `SECRET_KEY` | ✅ | JWT signing key. Generate with: `python -c "import secrets; print(secrets.token_urlsafe(64))"` |
 | `ADMIN_USERNAME` | ✅ | Admin dashboard login username |
 | `ADMIN_PASSWORD` | ✅ | Admin dashboard login password (use a strong password!) |
-| `SMTP_USER` | ❌ | Gmail address for sending email notifications |
-| `SMTP_PASSWORD` | ❌ | Gmail App Password ([generate here](https://support.google.com/accounts/answer/185833)) |
+| `SMTP_HOST` | ❌ | SMTP server host. Default: `smtp.gmail.com` |
+| `SMTP_PORT` | ❌ | SMTP server port. Default: `587` |
+| `SMTP_USER` | ❌ | SMTP login username/email for sending notifications |
+| `SMTP_PASSWORD` | ❌ | SMTP login password or App Password |
+| `SMTP_USE_TLS` | ❌ | Connect securely using TLS. Default: `true` |
 | `EMAIL_FROM` | ❌ | Sender email address |
 | `EMAIL_TO` | ❌ | Recipient email for enquiry notifications |
 | `CORS_ORIGINS` | ❌ | Comma-separated allowed origins. Default: `*` |
-| `STORAGE_BACKEND` | ❌ | `local` (default) or `cloudinary` |
+| `STORAGE_BACKEND` | ❌ | `local` (default), `cloudinary`, or `s3` |
 | `CLOUDINARY_CLOUD_NAME` | ❌* | Cloudinary cloud name (*required if using Cloudinary) |
 | `CLOUDINARY_API_KEY` | ❌* | Cloudinary API key |
 | `CLOUDINARY_API_SECRET` | ❌* | Cloudinary API secret |
@@ -72,32 +75,18 @@ All sensitive configuration is managed through environment variables. **Never co
 
 ## 🌐 Deployment
 
-### Frontend → Vercel
+This application is fully compatible with Vercel serverless deployment (handling the frontend assets and python backend API as serverless routes).
 
-1. Push this repository to GitHub
-2. Go to [vercel.com](https://vercel.com) → Import Project → Select your repo
-3. Vercel will auto-detect the `vercel.json` configuration
-4. **Important**: Update `vercel.json` to replace `YOUR-BACKEND-URL` with your actual Render backend URL
-5. Deploy!
+### Quick Vercel Setup
 
-### Backend → Render
-
-1. Go to [render.com](https://render.com) → New Web Service → Connect your repo
-2. Render will auto-detect the `render.yaml` configuration
-3. Set the following environment variables in the Render dashboard:
-   - `SECRET_KEY` — generate a strong random key
-   - `ADMIN_USERNAME` — your admin username
-   - `ADMIN_PASSWORD` — a strong admin password
-   - `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_FROM`, `EMAIL_TO` — if using email notifications
-4. Deploy!
-
-### Post-Deployment
-
-After both are deployed:
-
-1. Update `vercel.json`: Replace `https://YOUR-BACKEND-URL.onrender.com` with your actual Render URL
-2. Update `CORS_ORIGINS` on Render to include your Vercel frontend URL
-3. Redeploy both services
+1. **Push this repository to GitHub**
+2. **Import to Vercel**: Connect your repo on [Vercel](https://vercel.com).
+3. **Configure Settings**:
+   - Vercel automatically detects the configuration in `vercel.json`.
+   - Set the build command to `python build.py` (handles HTML/CSS/JS minification).
+   - Set the output directory to `dist` (holds optimized static files).
+4. **Environment Variables**: Add your production env keys (`ADMIN_USERNAME`, `ADMIN_PASSWORD`, `SECRET_KEY`, `SMTP_USER`, etc.) in the Vercel project settings.
+5. **Deploy!** Vercel will build the frontend assets using Python, minify them, and mount the FastAPI backend on the `/api/*` pathways.
 
 ---
 

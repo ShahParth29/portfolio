@@ -8,6 +8,73 @@
     <meta name="description"
         content="Professional cinematic video production portfolio by NPJ Productions. High-end wedding highlights, commercial ads, corporate documentaries, and creative reels.">
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="img/favicon-512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://npjproductions.com/">
+    <meta property="og:title" content="NPJ Productions — Cinematic Video & Film Production">
+    <meta property="og:description" content="Professional cinematic video production portfolio by NPJ Productions. High-end wedding highlights, commercial ads, corporate documentaries, and creative reels.">
+    <meta property="og:image" content="https://npjproductions.com/img/favicon-512x512.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://npjproductions.com/">
+    <meta property="twitter:title" content="NPJ Productions — Cinematic Video & Film Production">
+    <meta property="twitter:description" content="Professional cinematic video production portfolio by NPJ Productions. High-end wedding highlights, commercial ads, corporate documentaries, and creative reels.">
+    <meta property="twitter:image" content="https://npjproductions.com/img/favicon-512x512.png">
+
+    <!-- Schema.org JSON-LD structured data for NPJ Productions -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "NPJ Productions",
+      "image": "https://npjproductions.com/img/favicon-512x512.png",
+      "@id": "https://npjproductions.com/#organization",
+      "url": "https://npjproductions.com/",
+      "telephone": "+918141050770",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Ahmedabad",
+        "addressLocality": "Ahmedabad",
+        "addressRegion": "Gujarat",
+        "postalCode": "380001",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 23.0225,
+        "longitude": 72.5714
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+        ],
+        "opens": "09:00",
+        "closes": "21:00"
+      },
+      "sameAs": [
+        "https://instagram.com/npjproductions",
+        "https://youtube.com/npjproductions",
+        "https://x.com/npjproductions"
+      ]
+    }
+    </script>
 </head>
 
 <body>
@@ -19,10 +86,10 @@
     <nav class="navbar" id="navbar">
         <div class="container">
             <a href="index.html" class="nav-logo">
-                <img src="img/logo.png" alt="NPJ Productions" class="nav-logo-img">
+                <img src="img/logo.webp" alt="NPJ Productions Logo" class="nav-logo-img">
                 <span class="setting-site_name">NPJ Productions</span>
             </a>
-            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
                 <span></span><span></span><span></span>
             </button>
             <ul class="nav-links" id="nav-links">
@@ -142,15 +209,15 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <a href="index.html" class="nav-logo">
-                        <img src="img/logo.png" alt="NPJ Productions" class="nav-logo-img" style="height: 48px;">
+                        <img src="img/logo.webp" alt="NPJ Productions Logo" class="nav-logo-img" style="height: 48px;" loading="lazy">
                         <span class="setting-site_name">NPJ Productions</span>
                     </a>
                     <p class="setting-about_text">Professional video editor specializing in cinematic films, reels, and
                         wedding videos. Turning your raw footage into visual stories.</p>
                     <div class="footer-social">
-                        <a href="#" title="YouTube" class="setting-youtube">▶</a>
-                        <a href="#" title="Instagram" class="setting-instagram">📷</a>
-                        <a href="#" title="Twitter" class="setting-twitter">𝕏</a>
+                        <a href="#" title="YouTube" class="setting-youtube" aria-label="YouTube Channel">▶</a>
+                        <a href="#" title="Instagram" class="setting-instagram" aria-label="Instagram Profile">📷</a>
+                        <a href="#" title="Twitter" class="setting-twitter" aria-label="Twitter Profile">𝕏</a>
                     </div>
                 </div>
                 <div>
