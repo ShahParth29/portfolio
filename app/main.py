@@ -150,34 +150,34 @@ def seed_data():
         if db.query(PricingPlan).count() == 0:
             db.add_all([
                 PricingPlan(
-                name="Editing (Up to 3 min)",
-                price=2000,
-                original_price=3000,
-                features="Up to 3 min video,Basic color grading,Cuts & transitions,Royalty-free music,2 revisions,Delivery in 2 days",
-                is_popular=False,
-            ),
-            PricingPlan(
-                name="Shoot & Edit (Up to 3 min)",
-                price=3000,
-                original_price=5000,
-                features="Custom video shooting,Full professional editing,Cuts & transitions,Basic color grading,3 revisions,Delivery in 4 days",
-                is_popular=False,
-            ),
-            PricingPlan(
-                name="Editing (Up to 10 min)",
-                price=4000,
-                original_price=6000,
-                features="Up to 10 min video,Advanced color grading,Cuts & transitions,Royalty-free music,3 revisions,Delivery in 4 days",
-                is_popular=True,
-            ),
-            PricingPlan(
-                name="Shoot & Edit (Up to 10 min)",
-                price=5000,
-                original_price=8000,
-                features="Custom video shooting,Full professional editing,Cinema-grade color grading,Sound design & custom SFX,5 revisions,Delivery in 6 days",
-                is_popular=False,
-            ),
-        ])
+                    name="Post-Production & Grading Suite",
+                    price=8000,
+                    original_price=12000,
+                    features="Up to 5 min cinematic edit,Advanced DaVinci color grading,Sound design & SFX mix,4K UHD final rendering,3 review sessions,4-day delivery",
+                    is_popular=False,
+                ),
+                PricingPlan(
+                    name="Commercial Video Production",
+                    price=25000,
+                    original_price=35000,
+                    features="Professional commercial shoot,RED/Sony FX camera package,High-end studio lighting,Cinema post-production & grading,Multi-platform deliverables,5-day delivery",
+                    is_popular=True,
+                ),
+                PricingPlan(
+                    name="Corporate Storytelling & Brand Ads",
+                    price=40000,
+                    original_price=55000,
+                    features="Scriptwriting & pre-production,1-day brand documentary shoot,Custom graphic elements & titles,Full post-production & sound design,Standard marketing license,7-day delivery",
+                    is_popular=False,
+                ),
+                PricingPlan(
+                    name="Cinematic Film & Weddings",
+                    price=50000,
+                    original_price=70000,
+                    features="Multi-camera wedding documentary shoot,Professional cine drone coverage (DJI),Cinema-grade color grading,Custom narrative storytelling edit,Premium audio recording & SFX,10-day delivery",
+                    is_popular=False,
+                ),
+            ])
 
         # ── Sample Blog Post ──────────────────────────────────────────────
         if db.query(BlogPost).filter(BlogPost.slug == "5-color-grading-tips").count() == 0:

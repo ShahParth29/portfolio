@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
-   Gallery — Filter buttons + Lightbox logic for portfolio.html
+   Gallery — Filter buttons + Lightbox logic for works.html
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 let allVideos = [];

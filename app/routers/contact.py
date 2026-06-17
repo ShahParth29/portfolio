@@ -24,7 +24,7 @@ def submit_enquiry(data: EnquiryCreate, db: Session = Depends(get_db)):
     # Honeypot spam check: if website is filled, discard the submit silently but return success
     if data.website:
         print(f"[SPAM DETECTED] Discarding spam submission from {data.email} with honeypot field filled.")
-        return {"message": "Your enquiry has been submitted! I'll get back to you soon."}
+        return {"message": "Your enquiry has been submitted! We'll get back to you soon."}
 
     enquiry_data = data.model_dump(exclude={"website"})
     enquiry = ClientEnquiry(**enquiry_data)
@@ -50,7 +50,7 @@ def submit_enquiry(data: EnquiryCreate, db: Session = Depends(get_db)):
     except Exception as exc:
         print(f"[CONTACT] Email notification failed: {exc}")
 
-    return {"message": "Your enquiry has been submitted! I'll get back to you soon."}
+    return {"message": "Your enquiry has been submitted! We'll get back to you soon."}
 
 
 # ── Admin Auth ─────────────────────────────────────────────────────────────────
