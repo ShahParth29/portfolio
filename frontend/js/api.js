@@ -451,8 +451,12 @@ async function uploadFile(file) {
                 const data = await res.json();
                 return { url: data.secure_url };
             } else {
-                const err = await res.json();
-                throw new Error(err.error?.message || "Cloudinary upload failed");
+                let errMsg = "Cloudinary upload failed";
+                try {
+                    const err = await res.json();
+                    errMsg = err.error?.message || errMsg;
+                } catch (_) {}
+                throw new Error(errMsg);
             }
         }
     } catch (e) {
@@ -472,8 +476,14 @@ async function uploadFile(file) {
         body: formData
     });
     if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.detail || "Failed to upload file");
+        let errMsg = "Failed to upload file";
+        try {
+            const err = await res.json();
+            errMsg = err.detail || errMsg;
+        } catch (_) {
+            errMsg = `Upload failed: Status ${res.status} (${res.statusText || "Payload Too Large"})`;
+        }
+        throw new Error(errMsg);
     }
     return res.json();
 }
